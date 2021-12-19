@@ -14,7 +14,7 @@ Window::Window(QWidget * parent) : QWidget(parent) {
 
     // Set the background of the window
     // TODO: Relative path / allow changing within
-    QPixmap background("/home/jonathon/Pivot/resources/backgrounds/index.jpeg");
+    QPixmap background("/home/jonathon/AutoDash/resources/backgrounds/index.jpeg");
     background = background.scaled(this->size(), Qt::IgnoreAspectRatio);
     QPalette palette;
     palette.setBrush(QPalette::Window, background);

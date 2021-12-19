@@ -5,6 +5,7 @@
 #include <QTimer>
 
 #include "widget/Bar.hpp"
+#include "widget/SVGLabel.hpp"
 
 // Main application status bar, displaying various status
 // icons and the time.
@@ -14,7 +15,7 @@ namespace Widget {
 
         private:
             // Clock.
-            QLabel * clock;
+            SVGLabel * clock;
 
             // 1 second timer to update clock.
             QTimer * clockTimer;

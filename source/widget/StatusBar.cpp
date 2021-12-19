@@ -10,16 +10,19 @@ namespace Widget {
         QString stylesheet = this->labelStyleSheet();
 
         // Create clock object
-        this->clock = new QLabel();
-        this->clock->setFont(font);
-        this->clock->setStyleSheet(stylesheet);
+        // TODO: Change path
+        this->clock = new SVGLabel();
+        this->clock->setSVG("/home/jonathon/AutoDash/resources/icons/clock.svg");
+        this->clock->setLabelStyle(font, stylesheet);
         this->updateClock();
 
         // Create title object
+        font.setBold(false);
         this->title = new QLabel();
         this->title->setFont(font);
         this->title->setStyleSheet(stylesheet);
         this->title->setText("( Home )");
+        font.setBold(true);
 
         // TODO: Create icon group
         QLabel * icons = new QLabel();
@@ -27,7 +30,7 @@ namespace Widget {
         icons->setStyleSheet(stylesheet);
         icons->setText("[B] [⇑]");
 
-        // Set up the status bar's layout.
+        // Set up the status bar's layout
         QHBoxLayout * layout = new QHBoxLayout(this);
         layout->addWidget(this->clock, 0, Qt::AlignLeft);
         layout->addWidget(this->title, 0, Qt::AlignCenter);
@@ -45,7 +48,11 @@ namespace Widget {
 
         // TODO: 12-hour/24-hour configurable
         QString text = time.toString("HH:mm");
-        this->clock->setText(text);
+        if (time.second() % 2 == 0) {
+            text[2] = ' ';
+        }
+
+        this->clock->setLabel(text);
         this->adjustSize();
     }
 

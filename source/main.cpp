@@ -8,7 +8,7 @@ int main(int argc, char * argv[]) {
     QApplication app(argc, argv);
 
     // Initialize our custom fonts
-    QFontDatabase::addApplicationFont("/home/jonathon/Pivot/resources/fonts/Rubik.ttf");
+    QFontDatabase::addApplicationFont("/home/jonathon/AutoDash/resources/fonts/Rubik.ttf");
 
     // Create and show the main window
     Window w;
