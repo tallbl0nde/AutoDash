@@ -12,7 +12,7 @@ namespace Widget {
     QFont Bar::labelFont() {
         QFont font = QFont("Rubik");
         font.setBold(true);
-        font.setPointSize(14);
+        font.setPointSize(18);
         return font;
     }
 

@@ -21,7 +21,7 @@ namespace Widget {
         this->title = new QLabel();
         this->title->setFont(font);
         this->title->setStyleSheet(stylesheet);
-        this->title->setText("( Home )");
+        this->title->setText("");
         font.setBold(true);
 
         // TODO: Create icon group
@@ -56,7 +56,7 @@ namespace Widget {
         this->adjustSize();
     }
 
-    void StatusBar::updateTitle(QString & title) {
+    void StatusBar::setTitle(QString title) {
         this->title->setText(title);
         this->adjustSize();
     }

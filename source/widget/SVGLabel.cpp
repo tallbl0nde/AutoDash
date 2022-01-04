@@ -17,6 +17,14 @@ namespace Widget {
         layout->addWidget(this->label);
     }
 
+    void SVGLabel::resizeEvent(QResizeEvent * event) {
+        event->accept();
+
+        // Set the minimum size of the svg to the height of the label (making it 1:1)
+        int size = this->size().height() * 0.9;
+        this->svg->setFixedSize(size, size);
+    }
+
     void SVGLabel::setLabel(QString label) {
         this->label->setText(label);
     }

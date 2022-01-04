@@ -3,6 +3,7 @@
 
 #include <QFont>
 #include <QLabel>
+#include <QResizeEvent>
 #include <QString>
 #include <QSvgWidget>
 #include <QWidget>
@@ -18,6 +19,10 @@ namespace Widget {
 
             // SVG widget.
             QSvgWidget * svg;
+
+        protected:
+            // Overload to adjust svg size.
+            void resizeEvent(QResizeEvent * event);
 
         public:
             // Creates a new SVGLabel from the specified icon file and label.

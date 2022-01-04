@@ -1,6 +1,8 @@
+#include <QGraphicsOpacityEffect>
 #include <QHBoxLayout>
 #include <QLabel>
 
+#include "widget/SVGLabel.hpp"
 #include "widget/ToolBar.hpp"
 
 namespace Widget {
@@ -10,16 +12,17 @@ namespace Widget {
         QString stylesheet = this->labelStyleSheet();
 
         // Create back button
-        QLabel * back = new QLabel();
-        back->setFont(font);
-        back->setStyleSheet(stylesheet);
-        back->setText("< Back");
+        this->back = new SVGLabel();
+        this->back->setLabel("Back");
+        this->back->setLabelStyle(font, stylesheet);
+        this->back->setSVG("/home/jonathon/AutoDash/resources/icons/back.svg");
+        this->setBackEnabled(false);
 
         // Create home/apps button
-        QLabel * home = new QLabel();
-        home->setFont(font);
-        home->setStyleSheet(stylesheet);
-        home->setText("[] Apps");
+        SVGLabel * home = new SVGLabel();
+        home->setLabel("Home");
+        home->setLabelStyle(font, stylesheet);
+        home->setSVG("/home/jonathon/AutoDash/resources/icons/apps.svg");
 
         // Create 'control panel'
         QLabel * controlPanel = new QLabel();
@@ -29,12 +32,28 @@ namespace Widget {
 
         // Set up the tool bar's layout.
         QHBoxLayout * layout = new QHBoxLayout(this);
-        layout->addWidget(back, 0, Qt::AlignLeft);
+        layout->addWidget(this->back, 0, Qt::AlignLeft);
         layout->addWidget(home, 0, Qt::AlignCenter);
         layout->addWidget(controlPanel, 0, Qt::AlignRight);
 
         // Resize to fit text
         this->adjustSize();
+    }
+
+    void ToolBar::setBackEnabled(const bool enable) {
+        QGraphicsOpacityEffect * effect = new QGraphicsOpacityEffect(this->back);
+
+        // TODO: Toggle press event?
+        if (enable) {
+            // *Undim* the widget
+            effect->setOpacity(1.0);
+
+        } else {
+            // Dim the widget
+            effect->setOpacity(0.3);
+        }
+
+        this->back->setGraphicsEffect(effect);
     }
 
     ToolBar::~ToolBar() {

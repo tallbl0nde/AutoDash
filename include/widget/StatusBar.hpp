@@ -26,12 +26,12 @@ namespace Widget {
             // Updates the time shown in the clock.
             void updateClock();
 
-            // Updates the title shown within the status bar.
-            void updateTitle(QString & title);
-
         public:
             // Creates a new StatusBar.
             explicit StatusBar(QWidget * parent = nullptr);
+
+            // Updates the title shown within the status bar.
+            void setTitle(QString title);
 
             // Destructor.
             ~StatusBar();

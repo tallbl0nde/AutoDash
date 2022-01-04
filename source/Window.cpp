@@ -23,6 +23,7 @@ Window::Window(QWidget * parent) : QWidget(parent) {
     // Create and position status bar
     Widget::StatusBar * statusBar = new Widget::StatusBar(this);
     statusBar->setGeometry(0, 0, this->width(), statusBar->height());
+    statusBar->setTitle("Home");
 
     // Create the main widget stack
     QStackedWidget * stack = new QStackedWidget(this);
