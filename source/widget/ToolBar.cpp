@@ -2,6 +2,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 
+#include "widget/IconGroup.hpp"
 #include "widget/SVGLabel.hpp"
 #include "widget/ToolBar.hpp"
 
@@ -25,16 +26,18 @@ namespace Widget {
         home->setSVG("/home/jonathon/AutoDash/resources/icons/apps.svg");
 
         // Create 'control panel'
-        QLabel * controlPanel = new QLabel();
-        controlPanel->setFont(font);
-        controlPanel->setStyleSheet(stylesheet);
-        controlPanel->setText("[R]");
+        // TODO: Change paths
+        IconGroup * controlPanel = new IconGroup();
+        controlPanel->setIconSpacing(15);
+        controlPanel->addIcon("reload", "/home/jonathon/AutoDash/resources/icons/reload.svg");
+        controlPanel->addIcon("power", "/home/jonathon/AutoDash/resources/icons/power.svg");
 
         // Set up the tool bar's layout.
         QHBoxLayout * layout = new QHBoxLayout(this);
         layout->addWidget(this->back, 0, Qt::AlignLeft);
         layout->addWidget(home, 0, Qt::AlignCenter);
         layout->addWidget(controlPanel, 0, Qt::AlignRight);
+        layout->setMargin(14);
 
         // Resize to fit text
         this->adjustSize();
