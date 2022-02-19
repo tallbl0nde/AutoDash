@@ -23,7 +23,7 @@ Launcher::Launcher(QWidget * parent) : QWidget(parent) {
         std::string str = "Plugin Number " + std::to_string(i);
         plugin->setLabel(QString::fromStdString(str));
         plugin->setSVG("/home/jonathon/AutoDash/resources/icons/back.svg");
-        plugin->setMinimumHeight(150);
+        plugin->setMinimumHeight(100);
 
         int row = (i/columns);
         int column = (i%columns);

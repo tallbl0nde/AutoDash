@@ -4,21 +4,25 @@
 #include <QScroller>
 #include <QStackedWidget>
 
+#include "factory/ConfigFactory.hpp"
 #include "Launcher.hpp"
 #include "widget/StatusBar.hpp"
 #include "widget/ToolBar.hpp"
 #include "Window.hpp"
 
 Window::Window(QWidget * parent) : QWidget(parent) {
+    // Get config object
+    ConfigFactory configFactory;
+    IConfig * config = configFactory.getConfig();
+
     // Force resize to 800x480
     // TODO: Remove the forced size, scale dynamically
     this->resize(800, 480);
     this->setStyleSheet("background: transparent");
 
     // Set the background of the window
-    // TODO: Relative path / allow changing within
     QWidget * background = new QWidget(this);
-    background->setStyleSheet("background-image: url('/home/jonathon/AutoDash/resources/backgrounds/index.jpeg');");
+    background->setStyleSheet(QString::fromStdString("background-image: url('" + config->backgroundImageFilePath() + "');"));
     background->setGeometry(this->rect());
     background->setFixedSize(this->size());
 
@@ -42,7 +46,7 @@ Window::Window(QWidget * parent) : QWidget(parent) {
     scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
     QScroller::grabGesture(scrollArea, QScroller::LeftMouseButtonGesture);
 
-    Launcher * launcher = new Launcher();
+    Launcher * launcher = new Launcher(scrollArea);
     scrollArea->setWidget(launcher);
     launcher->resize(scrollArea->width(), launcher->height());
 }
