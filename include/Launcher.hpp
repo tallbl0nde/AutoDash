@@ -9,7 +9,7 @@ class Launcher : public QWidget {
 
     public:
         // Constructs a new launcher.
-        explicit Launcher(QWidget * parent);
+        explicit Launcher(QWidget * parent = nullptr);
 };
 
 #endif
