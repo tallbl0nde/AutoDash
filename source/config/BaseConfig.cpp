@@ -2,6 +2,7 @@
 
 BaseConfig::BaseConfig() {
     this->backgroundImageFilePath_ = "/home/jonathon/AutoDash/resources/backgrounds/index.jpeg";
+    this->modulesFolderPath_ = "/home/jonathon/AutoDash/modules/";
     this->resourcesFolderPath_ = "/home/jonathon/AutoDash/resources/";
     this->fontFamily_ = "Rubik";
     this->fontSize_ = 18;
@@ -15,6 +16,15 @@ std::string BaseConfig::backgroundImageFilePath() {
 
 bool BaseConfig::setBackgroundImageFilePath(const std::string path) {
     this->backgroundImageFilePath_ = path;
+    return true;
+}
+
+std::string BaseConfig::modulesFolderPath() {
+    return this->modulesFolderPath_;
+}
+
+bool BaseConfig::setModulesFolderPath(const std::string path) {
+    this->modulesFolderPath_ = path;
     return true;
 }
 

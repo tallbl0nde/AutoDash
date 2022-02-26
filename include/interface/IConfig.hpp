@@ -31,6 +31,9 @@ class IConfig {
         // Event handlers to invoke when backgroundImageFilePath is changed.
         std::vector<std::pair<StringHandler, InvokeRequest>> backgroundImageFilePathHandlers;
 
+        // Event handlers to invoke when modulesFolderPath is changed.
+        std::vector<std::pair<StringHandler, InvokeRequest>> modulesFolderPathHandlers;
+
         // Event handlers to invoke when resourcesFolderPath is changed.
         std::vector<std::pair<StringHandler, InvokeRequest>> resourcesFolderPathHandlers;
 
@@ -52,6 +55,15 @@ class IConfig {
         // Raises the BackgroundImageFilePathChanged event.
         void raiseBackgroundImageFilePathChanged(const std::string str) {
             for (auto & entry : this->backgroundImageFilePathHandlers) {
+                if (entry.second()) {
+                    entry.first(str);
+                }
+            }
+        }
+
+        // Raises the ModulesFolderPathChanged event.
+        void raiseModulesFolderPathChanged(const std::string str) {
+            for (auto & entry : this->modulesFolderPathHandlers) {
                 if (entry.second()) {
                     entry.first(str);
                 }
@@ -111,6 +123,11 @@ class IConfig {
         // Sets the path to the image to be used as a background.
         virtual bool setBackgroundImageFilePath(const std::string) = 0;
 
+        // Gets the modules folder path.
+        virtual std::string modulesFolderPath() = 0;
+        // Sets the modules folder path.
+        virtual bool setModulesFolderPath(const std::string) = 0;
+
         // Gets the resources folder path.
         virtual std::string resourcesFolderPath() = 0;
         // Sets the resources folder path.
@@ -163,6 +180,11 @@ class IConfig {
         // Registers an event handler with the BackgroundImageFilePathChanged event.
         void onBackgroundImageFilePathChanged(const StringHandler & handler, const InvokeRequest & canInvoke) {
             this->backgroundImageFilePathHandlers.push_back(std::make_pair(handler, canInvoke));
+        }
+
+        // Registers an event handler with the ModulesFolderPathChanged event.
+        void onModulesFolderPathChanged(const StringHandler & handler, const InvokeRequest & canInvoke) {
+            this->modulesFolderPathHandlers.push_back(std::make_pair(handler, canInvoke));
         }
 
         // Registers an event handler with the ResourcesFolderPathChanged event.

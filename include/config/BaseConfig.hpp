@@ -8,6 +8,7 @@
 class BaseConfig : public IConfig {
     private:
         std::string backgroundImageFilePath_;
+        std::string modulesFolderPath_;
         std::string resourcesFolderPath_;
         std::string fontFamily_;
         int fontSize_;
@@ -19,6 +20,9 @@ class BaseConfig : public IConfig {
 
         std::string backgroundImageFilePath();
         bool setBackgroundImageFilePath(const std::string);
+
+        std::string modulesFolderPath();
+        bool setModulesFolderPath(const std::string);
 
         std::string resourcesFolderPath();
         bool setResourcesFolderPath(const std::string);
