@@ -2,13 +2,17 @@
 #define WINDOW_HPP
 
 #include <QWidget>
+#include <vector>
 
+class IModule;
+
+// Root application object.
 class Window : public QWidget {
     Q_OBJECT
 
     public:
         // Constructs a new window.
-        explicit Window(QWidget * parent = nullptr);
+        explicit Window(std::vector<IModule *> modules, QWidget * parent = nullptr);
 };
 
 #endif

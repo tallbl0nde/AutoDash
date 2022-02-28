@@ -5,12 +5,14 @@
 #include <QStackedWidget>
 
 #include "factory/ConfigFactory.hpp"
+#include "interface/IModule.hpp"
 #include "Launcher.hpp"
 #include "widget/StatusBar.hpp"
 #include "widget/ToolBar.hpp"
 #include "Window.hpp"
 
-Window::Window(QWidget * parent) : QWidget(parent) {
+#include "Log.hpp"
+Window::Window(std::vector<IModule *> modules, QWidget * parent) : QWidget(parent) {
     // Get config object
     ConfigFactory configFactory;
     IConfig * config = configFactory.getConfig();
@@ -48,5 +50,12 @@ Window::Window(QWidget * parent) : QWidget(parent) {
 
     Launcher * launcher = new Launcher(scrollArea);
     scrollArea->setWidget(launcher);
-    launcher->resize(scrollArea->width(), launcher->height());
+
+    // Add entries to the launcher
+    for (IModule * module : modules) {
+        IModule::Metadata meta = module->metadata();
+        launcher->addEntry(meta.iconPath, meta.name, meta.version);
+    }
+
+    launcher->finalize(scrollArea);
 }

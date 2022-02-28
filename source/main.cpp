@@ -36,7 +36,7 @@ int main(int argc, char * argv[]) {
     std::vector<IModule *> modules = moduleLoader.loadAllModules();
 
     // Create and show the main window
-    Window * w = new Window();
+    Window * w = new Window(modules);
     w->show();
     int result = app.exec();
 

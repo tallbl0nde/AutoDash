@@ -1,10 +1,10 @@
 #include <QHBoxLayout>
 #include <QPainter>
 
-#include "widget/PluginIcon.hpp"
+#include "widget/ModuleIcon.hpp"
 
 namespace Widget {
-    PluginIcon::PluginIcon(QWidget * parent) : QWidget(parent) {
+    ModuleIcon::ModuleIcon(QWidget * parent) : QWidget(parent) {
         // Create layout
         // TODO: Update
         QHBoxLayout * layout = new QHBoxLayout(this);
@@ -19,7 +19,7 @@ namespace Widget {
         layout->addWidget(this->label);
     }
 
-    void PluginIcon::paintEvent(QPaintEvent * event) {
+    void ModuleIcon::paintEvent(QPaintEvent * event) {
         // TODO: Global colour?
         Q_UNUSED(event);
         QColor colour(0, 0, 0, 80);
@@ -33,7 +33,7 @@ namespace Widget {
         painter.fillPath(path, colour);
     }
 
-    void PluginIcon::resizeEvent(QResizeEvent * event) {
+    void ModuleIcon::resizeEvent(QResizeEvent * event) {
         event->accept();
 
         // Set the minimum size of the svg to the height of the label (making it 1:1)
@@ -42,16 +42,16 @@ namespace Widget {
         this->svg->setFixedSize(size, size);
     }
 
-    void PluginIcon::setLabel(QString label) {
+    void ModuleIcon::setLabel(QString label) {
         this->label->setText(label);
     }
 
-    void PluginIcon::setLabelStyle(QFont & font, QString & stylesheet) {
+    void ModuleIcon::setLabelStyle(QFont & font, QString & stylesheet) {
         this->label->setFont(font);
         this->label->setStyleSheet(stylesheet);
     }
 
-    void PluginIcon::setSVG(QString svg) {
+    void ModuleIcon::setSVG(QString svg) {
         this->svg->load(svg);
     }
 };

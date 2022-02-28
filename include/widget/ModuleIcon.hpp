@@ -1,5 +1,5 @@
-#ifndef WIDGET_PLUGINICON_HPP
-#define WIDGET_PLUGINICON_HPP
+#ifndef WIDGET_MODULEICON_HPP
+#define WIDGET_MODULEICON_HPP
 
 #include <QLabel>
 #include <QPaintEvent>
@@ -8,9 +8,9 @@
 #include <QWidget>
 
 namespace Widget {
-    // Widget representing a plugin. It consists of a background,
+    // Widget representing a module. It consists of a background,
     // icon and label.
-    class PluginIcon : public QWidget {
+    class ModuleIcon : public QWidget {
         Q_OBJECT
 
         private:
@@ -28,8 +28,8 @@ namespace Widget {
             void resizeEvent(QResizeEvent * event);
 
         public:
-            // Constructs a new PluginIcon.
-            explicit PluginIcon(QWidget * parent = nullptr);
+            // Constructs a new ModuleIcon.
+            explicit ModuleIcon(QWidget * parent = nullptr);
 
             // Sets the label text.
             void setLabel(QString label);
