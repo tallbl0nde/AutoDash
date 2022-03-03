@@ -3,17 +3,23 @@
 
 #include <QFont>
 #include <QLabel>
+#include <QPaintEvent>
 #include <QResizeEvent>
 #include <QString>
 #include <QSvgWidget>
 #include <QWidget>
 
+#include "interface/IClickable.hpp"
+
 namespace Widget {
     // Widget consisting of an SVG icon positioned to the left of a label.
-    class SVGLabel : public QWidget {
+    class SVGLabel : public IClickable {
         Q_OBJECT
 
         private:
+            // Background colour.
+            QColor backgroundColour;
+
             // Label.
             QLabel * label;
 
@@ -21,8 +27,17 @@ namespace Widget {
             QSvgWidget * svg;
 
         protected:
+            // Overload to draw background.
+            void paintEvent(QPaintEvent *);
+
             // Overload to adjust svg size.
-            void resizeEvent(QResizeEvent * event);
+            void resizeEvent(QResizeEvent *);
+
+            // Implement IClickable members.
+            void onClick() override;
+            void onRegainedFocus() override;
+            void onLostFocus() override;
+            void onRelease() override;
 
         public:
             // Creates a new SVGLabel from the specified icon file and label.
