@@ -37,7 +37,8 @@ namespace Widget {
         layout->addWidget(this->back, 0, Qt::AlignLeft);
         layout->addWidget(home, 0, Qt::AlignCenter);
         layout->addWidget(controlPanel, 0, Qt::AlignRight);
-        layout->setMargin(14);
+        layout->setMargin(0);
+        layout->setSpacing(0);
 
         // Resize to fit text
         this->adjustSize();
@@ -57,6 +58,7 @@ namespace Widget {
         }
 
         this->back->setGraphicsEffect(effect);
+        this->back->setEnabled(enable);
     }
 
     ToolBar::~ToolBar() {

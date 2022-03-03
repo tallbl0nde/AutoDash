@@ -15,6 +15,7 @@ namespace Widget {
         this->clock = new SVGLabel();
         this->clock->setSVG("/home/jonathon/AutoDash/resources/icons/clock.svg");
         this->clock->setLabelStyle(font, stylesheet);
+        this->clock->setEnabled(false);
         this->updateClock();
 
         // Create title object
@@ -36,7 +37,8 @@ namespace Widget {
         layout->addWidget(this->clock, 0, Qt::AlignLeft);
         layout->addWidget(this->title, 0, Qt::AlignCenter);
         layout->addWidget(icons, 0, Qt::AlignRight);
-        layout->setMargin(14);
+        layout->setMargin(0);
+        layout->setSpacing(0);
 
         // Finally start timer
         this->clockTimer = new QTimer(this);

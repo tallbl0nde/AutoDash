@@ -8,8 +8,8 @@ namespace Widget {
     SVGLabel::SVGLabel(QWidget * parent) : IClickable(parent) {
         // Create layout
         QHBoxLayout * layout = new QHBoxLayout(this);
-        layout->setMargin(0);
-        layout->setSpacing(0);
+        layout->setMargin(10);
+        layout->setSpacing(10);
 
         // Insert widgets into layout
         this->backgroundColour = QColor(255, 255, 255, 0);
@@ -30,7 +30,7 @@ namespace Widget {
         event->accept();
 
         // Set the minimum size of the svg to the height of the label (making it 1:1)
-        int size = this->size().height() * 0.9;
+        int size = (this->size().height() - (this->layout()->margin()*2)) * 0.9;
         this->svg->setFixedSize(size, size);
     }
 

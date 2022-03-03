@@ -6,7 +6,6 @@ namespace Widget {
     Bar::Bar(QWidget * parent) : QWidget(parent) {
         // Force width to 100% and set padding
         this->setFixedWidth(this->parentWidget()->width());
-        this->setStyleSheet("QWidget { padding-left: 0.2em; padding-right: 0.2em; }");
     }
 
     QFont Bar::labelFont() {

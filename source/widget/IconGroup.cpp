@@ -7,7 +7,7 @@ namespace Widget {
     IconGroup::IconGroup(QWidget * parent) : QWidget(parent) {
         // Create layout
         this->layout = new QHBoxLayout(this);
-        this->layout->setMargin(0);
+        this->layout->setMargin(10);
         this->layout->setSpacing(0);
     }
 
@@ -15,7 +15,7 @@ namespace Widget {
         event->accept();
 
         // Set the minimum size of all svg's to their height (making it 1:1)
-        int size = this->size().height() * 0.9;
+        int size = (this->size().height() - this->layout->margin()*2) * 0.9;
         for (Icon & icon : this->icons) {
             icon.widget->setFixedSize(size, size);
         }
