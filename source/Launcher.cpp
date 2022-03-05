@@ -5,31 +5,31 @@
 #include "widget/ModuleIcon.hpp"
 
 #include <iostream>
+#include "Log.hpp"
 
 Launcher::Launcher(QWidget * parent) : QWidget(parent) {
     this->entries = 0;
 
     // Initialize the grid
     // TODO: Scale in terms of resolution
-    this->grid = new QGridLayout();
+    this->grid = new QGridLayout(this);
     this->grid->setMargin(20);
     this->grid->setHorizontalSpacing(30);
     this->grid->setVerticalSpacing(20);
-
-    this->setLayout(this->grid);
 }
 
-void Launcher::addEntry(const QString iconPath, const QString name, const QString version) {
+void Launcher::addEntry(const QString iconPath, const QString name, const QString version, const std::function<void()> & onPress) {
     // Add a widget for the entry
-    Widget::ModuleIcon * plugin = new Widget::ModuleIcon();
-    plugin->setLabel(name);
-    plugin->setSVG(iconPath);
+    Widget::ModuleIcon * module = new Widget::ModuleIcon();
+    module->setLabel(name);
+    module->setSVG(iconPath);
+    module->onClicked(onPress);
 
     // TODO: Scale with window size
-    plugin->setMinimumHeight(100);
-    plugin->setMaximumHeight(100);
+    module->setMinimumHeight(100);
+    module->setMaximumHeight(100);
 
-    this->grid->addWidget(plugin, entries/2, entries%2, Qt::AlignTop);
+    this->grid->addWidget(module, entries/2, entries%2, Qt::AlignTop);
     entries++;
 }
 

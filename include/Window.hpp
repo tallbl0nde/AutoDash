@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <vector>
 
+#include "Log.hpp"
+
 class IModule;
 
 // Root application object.

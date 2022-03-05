@@ -25,6 +25,10 @@ class IModule {
         // Returns the metadata for the module.
         virtual Metadata metadata() = 0;
 
+        // Returns the widget to show when selecting
+        // this module from the launcher.
+        virtual QWidget * widget() = 0;
+
         // Destroys the module object.
         virtual ~IModule() {}
 };

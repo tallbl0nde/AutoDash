@@ -7,11 +7,13 @@
 #include "factory/ConfigFactory.hpp"
 #include "interface/IModule.hpp"
 #include "Launcher.hpp"
+#include "widget/MainFrame.hpp"
 #include "widget/StatusBar.hpp"
 #include "widget/ToolBar.hpp"
 #include "Window.hpp"
 
 #include "Log.hpp"
+
 Window::Window(std::vector<IModule *> modules, QWidget * parent) : QWidget(parent) {
     // Get config object
     ConfigFactory configFactory;
@@ -37,25 +39,35 @@ Window::Window(std::vector<IModule *> modules, QWidget * parent) : QWidget(paren
     Widget::ToolBar * toolBar = new Widget::ToolBar(this);
     toolBar->setGeometry(0, this->height() - toolBar->height(), this->width(), toolBar->height());
 
-    // Create the main widget stack with the launcher as the first widget
-    QStackedWidget * stack = new QStackedWidget(this);
-    stack->setGeometry(0, statusBar->y() + statusBar->height(), this->width(), this->height() - statusBar->height() - toolBar->height());
-
-    QScrollArea * scrollArea = new QScrollArea(stack);
-    scrollArea->resize(stack->size());
+    // Create the launcher
+    QScrollArea * scrollArea = new QScrollArea();
     scrollArea->setFrameShape(QFrame::NoFrame);
     scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
     scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
     QScroller::grabGesture(scrollArea, QScroller::LeftMouseButtonGesture);
 
     Launcher * launcher = new Launcher(scrollArea);
-    scrollArea->setWidget(launcher);
 
-    // Add entries to the launcher
+    // Create the main widget stack with the launcher as the first widget
+    Widget::MainFrame * stack = new Widget::MainFrame(scrollArea, this);
+    stack->setGeometry(0, statusBar->y() + statusBar->height(), this->width(), this->height() - statusBar->height() - toolBar->height());
+    stack->onWidgetChanged([toolBar](int historySize) {
+         toolBar->setBackEnabled(historySize != 1);
+    });
+    scrollArea->resize(stack->size());
+
+    // Process modules
     for (IModule * module : modules) {
+        // Add widgets to the stack
+        QWidget * widget = module->widget();
+        stack->addWidget(widget);
+
+        // Add entries to the launcher
         IModule::Metadata meta = module->metadata();
-        launcher->addEntry(meta.iconPath, meta.name, meta.version);
+        launcher->addEntry(meta.iconPath, meta.name, meta.version, [stack, widget]() {
+            stack->goToWidget(widget);
+        });
     }
 
-    launcher->finalize(scrollArea);
+    launcher->finalize(stack);
 }

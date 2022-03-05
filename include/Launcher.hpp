@@ -1,6 +1,7 @@
 #ifndef LAUNCHER_HPP
 #define LAUNCHER_HPP
 
+#include <functional>
 #include <QGridLayout>
 #include <QWidget>
 
@@ -18,7 +19,7 @@ class Launcher : public QWidget {
         explicit Launcher(QWidget * parent = nullptr);
 
         // Adds an entry to the launcher.
-        void addEntry(const QString iconPath, const QString name, const QString version);
+        void addEntry(const QString iconPath, const QString name, const QString version, const std::function<void()> &);
 
         // Finalizes the launcher after adding entries.
         void finalize(QWidget *);
