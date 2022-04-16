@@ -26,12 +26,6 @@ std::vector<IModule *> ModuleLoader::loadAllModules() {
 }
 
 IModule * ModuleLoader::loadModule(const std::string & moduleFolder) {
-    // Skip over build directories
-    if (moduleFolder.substr(0, 6) == "build-") {
-        Log::logWarning("Refusing to examine build directory '" + moduleFolder + "'");
-        return nullptr;
-    }
-
     // Change to 'module' directory
     Log::logInfo("Found '" + moduleFolder + "'");
     QDir moduleDir = QDir(QString::fromStdString(this->modulesFolder)).absoluteFilePath(QString::fromStdString(moduleFolder));

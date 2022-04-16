@@ -1,12 +1,12 @@
 #include <QHBoxLayout>
 #include <QPainter>
 
-#include "widget/ModuleIcon.hpp"
+#include "widget/LauncherEntry.hpp"
 
 #include "Log.hpp"
 
 namespace Widget {
-    ModuleIcon::ModuleIcon(QWidget * parent) : IClickable(parent) {
+    LauncherEntry::LauncherEntry(QWidget * parent) : IClickable(parent) {
         this->backgroundColour = QColor(255, 255, 255, 0);
         this->onClickedCallback = nullptr;
 
@@ -26,18 +26,18 @@ namespace Widget {
         this->layout->addWidget(this->label);
     }
 
-    QFont ModuleIcon::labelFont() {
+    QFont LauncherEntry::labelFont() {
         QFont font = QFont("Rubik");
         font.setBold(true);
         font.setPointSize(24);
         return font;
     }
 
-    QString ModuleIcon::labelStylesheet() {
+    QString LauncherEntry::labelStylesheet() {
         return QString("QLabel { color: white; }");
     }
 
-    void ModuleIcon::paintEvent(QPaintEvent * event) {
+    void LauncherEntry::paintEvent(QPaintEvent * event) {
         // TODO: Global colour?
         Q_UNUSED(event);
         QColor colour = QColor(50, 50, 50, 80);
@@ -52,7 +52,7 @@ namespace Widget {
         painter.fillPath(path, backgroundColour);
     }
 
-    void ModuleIcon::resizeEvent(QResizeEvent * event) {
+    void LauncherEntry::resizeEvent(QResizeEvent * event) {
         event->accept();
 
         // Set the minimum size of the svg to the height of the label (making it 1:1)
@@ -66,22 +66,22 @@ namespace Widget {
         this->layout->setSpacing(padding * 1.25);
     }
 
-    void ModuleIcon::onClick() {
+    void LauncherEntry::onClick() {
         this->backgroundColour.setAlpha(50);
         this->update();
     }
 
-    void ModuleIcon::onRegainedFocus() {
+    void LauncherEntry::onRegainedFocus() {
         this->backgroundColour.setAlpha(50);
         this->update();
     }
 
-    void ModuleIcon::onLostFocus() {
+    void LauncherEntry::onLostFocus() {
         this->backgroundColour.setAlpha(20);
         this->update();
     }
 
-    void ModuleIcon::onRelease() {
+    void LauncherEntry::onRelease() {
         this->backgroundColour.setAlpha(0);
         this->update();
 
@@ -90,20 +90,20 @@ namespace Widget {
         }
     }
 
-    void ModuleIcon::onClicked(const std::function<void ()> & func) {
+    void LauncherEntry::onClicked(const std::function<void ()> & func) {
         this->onClickedCallback = func;
     }
 
-    void ModuleIcon::setLabel(QString label) {
+    void LauncherEntry::setLabel(QString label) {
         this->label->setText(label);
     }
 
-    void ModuleIcon::setLabelStyle(QFont & font, QString & stylesheet) {
+    void LauncherEntry::setLabelStyle(QFont & font, QString & stylesheet) {
         this->label->setFont(font);
         this->label->setStyleSheet(stylesheet);
     }
 
-    void ModuleIcon::setSVG(QString svg) {
+    void LauncherEntry::setSVG(QString svg) {
         this->svg->load(svg);
     }
 };

@@ -1,5 +1,3 @@
-#include <QPalette>
-#include <QPixmap>
 #include <QScrollArea>
 #include <QScroller>
 #include <QStackedWidget>
@@ -8,8 +6,7 @@
 #include "interface/IModule.hpp"
 #include "Launcher.hpp"
 #include "widget/MainFrame.hpp"
-#include "widget/StatusBar.hpp"
-#include "widget/ToolBar.hpp"
+#include "widget/Taskbar.hpp"
 #include "Window.hpp"
 
 #include "Log.hpp"
@@ -30,29 +27,30 @@ Window::Window(std::vector<IModule *> modules, QWidget * parent) : QWidget(paren
     background->setGeometry(this->rect());
     background->setFixedSize(this->size());
 
-    // Create and position status bar
-    Widget::StatusBar * statusBar = new Widget::StatusBar(this);
-    statusBar->setGeometry(0, 0, this->width(), statusBar->height());
-    statusBar->setTitle("Home");
-
-    // Create and position tool bar
-    Widget::ToolBar * toolBar = new Widget::ToolBar(this);
-    toolBar->setGeometry(0, this->height() - toolBar->height(), this->width(), toolBar->height());
-
-    // Create the launcher
+    // Create the main area
     QScrollArea * scrollArea = new QScrollArea();
     scrollArea->setFrameShape(QFrame::NoFrame);
     scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
     scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
     QScroller::grabGesture(scrollArea, QScroller::LeftMouseButtonGesture);
-
-    Launcher * launcher = new Launcher(scrollArea);
-
-    // Create the main widget stack with the launcher as the first widget
     Widget::MainFrame * stack = new Widget::MainFrame(scrollArea, this);
-    stack->setGeometry(0, statusBar->y() + statusBar->height(), this->width(), this->height() - statusBar->height() - toolBar->height());
-    stack->onWidgetChanged([toolBar](int historySize) {
-         toolBar->setBackEnabled(historySize != 1);
+
+    // Create the taskbar
+    Widget::Taskbar * taskbar = new Widget::Taskbar(Widget::Taskbar::Orientation::Vertical, this);
+    taskbar->setBackButtonEnabled(false);
+    taskbar->setGeometry(this->width() - 80, 0, 80, this->height());
+    taskbar->onBackButtonClicked([stack]() {
+        stack->goBack();
+    });
+    taskbar->onLauncherButtonClicked([stack]() {
+        stack->goHome();
+    });
+
+    // Create the launcher
+    Launcher * launcher = new Launcher(scrollArea);
+    stack->setGeometry(0, 0, this->width() - taskbar->width(), this->height());
+    stack->onWidgetChanged([taskbar](int frames) {
+        taskbar->setBackButtonEnabled(frames > 1);
     });
     scrollArea->resize(stack->size());
 

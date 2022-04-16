@@ -13,7 +13,7 @@
 namespace Widget {
     // Widget representing a module. It consists of a background,
     // icon and label.
-    class ModuleIcon : public IClickable {
+    class LauncherEntry : public IClickable {
         Q_OBJECT
 
         private:
@@ -52,8 +52,8 @@ namespace Widget {
             void onRelease() override;
 
         public:
-            // Constructs a new ModuleIcon.
-            explicit ModuleIcon(QWidget * parent = nullptr);
+            // Constructs a new LauncherEntry.
+            explicit LauncherEntry(QWidget * parent = nullptr);
 
             // Sets the method to invoke when clicked/pressed.
             void onClicked(const std::function<void()> &);

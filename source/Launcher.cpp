@@ -2,7 +2,7 @@
 #include <QVBoxLayout>
 
 #include "Launcher.hpp"
-#include "widget/ModuleIcon.hpp"
+#include "widget/LauncherEntry.hpp"
 
 #include <iostream>
 #include "Log.hpp"
@@ -20,7 +20,7 @@ Launcher::Launcher(QWidget * parent) : QWidget(parent) {
 
 void Launcher::addEntry(const QString iconPath, const QString name, const QString version, const std::function<void()> & onPress) {
     // Add a widget for the entry
-    Widget::ModuleIcon * module = new Widget::ModuleIcon();
+    Widget::LauncherEntry * module = new Widget::LauncherEntry();
     module->setLabel(name);
     module->setSVG(iconPath);
     module->onClicked(onPress);

@@ -1,0 +1,9 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource>
+        <file>backgrounds/index.jpeg</file>
+        <file>fonts/Rubik.ttf</file>
+        <file>icons/back.svg</file>
+        <file>icons/launcher.svg</file>
+    </qresource>
+</RCC>

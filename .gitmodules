@@ -1,0 +1,3 @@
+[submodule "modules/openauto"]
+	path = modules/OpenAuto
+	url = https://github.com/tallbl0nde/AutoDash.OpenAuto

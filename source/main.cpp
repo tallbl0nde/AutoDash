@@ -11,6 +11,8 @@
 int main(int argc, char * argv[]) {
     // Create the application object
     QApplication app(argc, argv);
+    app.setOrganizationName("tallbl0nde");
+    app.setApplicationName("AutoDash");
 
     // Initialize resources
     ConfigFactory configFactory;
@@ -21,9 +23,9 @@ int main(int argc, char * argv[]) {
     Log::setLogLocation(Log::Location::Console);
 
     // Initialize our custom fonts
-    Log::logInfo("Scanning for .ttf fonts in '" + config->fontsFolderPath() + "'...");
+    Log::logInfo(std::string("Loading fonts in ':/'..."));
     Log::increaseIndent();
-    QDirIterator it(QString::fromStdString(config->fontsFolderPath()), QStringList() << "*.ttf", QDir::Files, QDirIterator::Subdirectories);
+    QDirIterator it(":/", QStringList() << "*.ttf", QDir::Files, QDirIterator::Subdirectories);
     while (it.hasNext()) {
         it.next();
         Log::logInfo("Adding font: " + it.fileName().toStdString());

@@ -10,12 +10,19 @@ class IClickable : public QWidget {
         // Flag indicating if currently 'clicked'.
         bool isClicked;
 
+        // Flag indicating if currenlt enabled.
+        bool isEnabled;
+
         // Flag indicating if currently 'focussed'.
         bool isFocussed;
 
     protected:
         // Listen for mouse presses/clicks.
         void mousePressEvent(QMouseEvent * event) override {
+            if (!this->isEnabled) {
+                return;
+            }
+
             event->accept();
             this->onClick();
 
@@ -25,6 +32,10 @@ class IClickable : public QWidget {
 
         // Listen for mouse moves.
         void mouseMoveEvent(QMouseEvent * event) override {
+            if (!this->isEnabled) {
+                return;
+            }
+
             if (this->isClicked) {
                 QRect rect = this->rect();
                 QPoint pos = event->pos();
@@ -44,6 +55,10 @@ class IClickable : public QWidget {
 
         // Listen for mouse release.
         void mouseReleaseEvent(QMouseEvent * event) override {
+            if (!this->isEnabled) {
+                return;
+            }
+
             if (this->isClicked) {
                 event->accept();
                 this->onRelease();
@@ -76,7 +91,19 @@ class IClickable : public QWidget {
         // Constructor.
         IClickable(QWidget * parent) : QWidget(parent) {
             this->isClicked = false;
+            this->isEnabled = true;
             this->isFocussed = false;
+        }
+
+        // Enables/disables the ability to react to clicks.
+        virtual void setEnabled(const bool enabled) {
+            this->isEnabled = enabled;
+
+            if (!enabled) {
+                this->isClicked = false;
+                this->isFocussed = false;
+                this->update();
+            }
         }
 };
 

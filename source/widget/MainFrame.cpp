@@ -16,7 +16,10 @@ namespace Widget {
 
         if (this->stack.size() > 1) {
             this->stack.pop();
-            this->onChange(this->stack.size());
+            if (this->onChange != nullptr)
+            {
+                this->onChange(this->stack.size());
+            }
         }
     }
 
@@ -26,7 +29,10 @@ namespace Widget {
         }
 
         this->setCurrentWidget(this->stack.top());
-        this->onChange(this->stack.size());
+        if (this->onChange != nullptr)
+        {
+            this->onChange(this->stack.size());
+        }
     }
 
     void MainFrame::addWidget(QWidget * widget) {
@@ -36,6 +42,9 @@ namespace Widget {
     void MainFrame::goToWidget(QWidget * widget) {
         this->stack.push(this->currentWidget());
         this->setCurrentWidget(widget);
-        this->onChange(this->stack.size());
+        if (this->onChange != nullptr)
+        {
+            this->onChange(this->stack.size());
+        }
     }
 };
