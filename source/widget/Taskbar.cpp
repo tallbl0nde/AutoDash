@@ -52,35 +52,34 @@ namespace Widget {
 
         // Add launcher button
         this->launcherButton = new SvgButton(":/icons/launcher.svg");
-        this->launcherButton->setBackgroundColour(QColor(40, 40, 40, 255));
         this->launcherButton->setFixedSize(60, 60);   // TODO: Scale
         this->launcherButton->setRoundingAmount(14);
-        this->launcherButton->setPaddingPercentage(20);
+        this->launcherButton->setPaddingPercentage(15);
         this->mainLayout->addWidget(this->launcherButton, 0, alignment);
 
         // Add splitter
-        this->mainLayout->addWidget(getLine(orientation, 60), 0, alignment);
+        this->mainLayout->addWidget(getLine(orientation, 50), 0, alignment);
 
         // Add favourites section
         this->favourites = new Favourites(orientation == Orientation::Horizontal ? Favourites::Orientation::Horizontal : Favourites::Orientation::Vertical);
         this->mainLayout->addWidget(favourites);
 
         // Add another splitter
-        this->mainLayout->addWidget(getLine(orientation, 60), 0, alignment);
+        this->mainLayout->addWidget(getLine(orientation, 50), 0, alignment);
 
         // Add back button
         this->backButton = new SvgButton(":/icons/back.svg");
-        this->backButton->setBackgroundColour(QColor(40, 40, 40, 255));
         this->backButton->setFixedSize(60, 60);   // TODO: Scale
         this->backButton->setRoundingAmount(14);
-        this->backButton->setPaddingPercentage(20);
+        this->backButton->setPaddingPercentage(15);
         this->mainLayout->addWidget(this->backButton, 0, alignment);
     }
 
     void Taskbar::paintEvent(QPaintEvent * event) {
         // TODO: Global colour?
         Q_UNUSED(event);
-        QColor colour = QColor(0, 0, 0, 80);
+        QColor colour = QColor(0, 0, 0, 120);
+        QColor colour2 = QColor(100, 100, 100, 100);
 
         QPainter painter(this);
         painter.setRenderHint(QPainter::Antialiasing);
@@ -88,6 +87,10 @@ namespace Widget {
         QPainterPath path;
         path.addRect(this->rect());
         painter.fillPath(path, colour);
+
+        path = QPainterPath();
+        path.addRect(QRect(0, 10, 1, this->height() - 20));
+        painter.fillPath(path, colour2);
     }
 
     void Taskbar::onBackButtonClicked(const std::function<void()> callback) {

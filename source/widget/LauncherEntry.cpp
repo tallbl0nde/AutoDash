@@ -29,7 +29,7 @@ namespace Widget {
     QFont LauncherEntry::labelFont() {
         QFont font = QFont("Rubik");
         font.setBold(true);
-        font.setPointSize(24);
+        font.setPointSize(20);
         return font;
     }
 
@@ -40,7 +40,7 @@ namespace Widget {
     void LauncherEntry::paintEvent(QPaintEvent * event) {
         // TODO: Global colour?
         Q_UNUSED(event);
-        QColor colour = QColor(50, 50, 50, 80);
+        QColor colour = QColor(0, 0, 0, 120);
 
         QPainter painter(this);
         painter.setRenderHint(QPainter::Antialiasing);

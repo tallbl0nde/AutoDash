@@ -13,7 +13,7 @@ Launcher::Launcher(QWidget * parent) : QWidget(parent) {
     // Initialize the grid
     // TODO: Scale in terms of resolution
     this->grid = new QGridLayout(this);
-    this->grid->setMargin(20);
+    this->grid->setMargin(30);
     this->grid->setHorizontalSpacing(30);
     this->grid->setVerticalSpacing(20);
 }
@@ -26,8 +26,7 @@ void Launcher::addEntry(const QString iconPath, const QString name, const QStrin
     module->onClicked(onPress);
 
     // TODO: Scale with window size
-    module->setMinimumHeight(100);
-    module->setMaximumHeight(100);
+    module->setFixedHeight(90);
 
     this->grid->addWidget(module, entries/2, entries%2, Qt::AlignTop);
     entries++;

@@ -1,7 +1,7 @@
 #include "config/BaseConfig.hpp"
 
 BaseConfig::BaseConfig() {
-    this->backgroundImageFilePath_ = "/home/jonathon/AutoDash/resources/backgrounds/index.jpeg";
+    this->backgroundImageFilePath_ = ":/backgrounds/background.png";
     this->modulesFolderPath_ = "/home/jonathon/AutoDash/modules/";
     this->resourcesFolderPath_ = "/home/jonathon/AutoDash/resources/";
     this->fontFamily_ = "Rubik";

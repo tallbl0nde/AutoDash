@@ -27,6 +27,11 @@ Window::Window(std::vector<IModule *> modules, QWidget * parent) : QWidget(paren
     background->setGeometry(this->rect());
     background->setFixedSize(this->size());
 
+    QWidget * backgroundTint = new QWidget(this);
+    backgroundTint->setStyleSheet("background-color: rgba(0, 0, 0, 130)");
+    backgroundTint->setGeometry(this->rect());
+    backgroundTint->setFixedSize(this->size());
+
     // Create the main area
     QScrollArea * scrollArea = new QScrollArea();
     scrollArea->setFrameShape(QFrame::NoFrame);
