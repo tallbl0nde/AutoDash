@@ -5,6 +5,7 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
+#include "widget/Favourites.hpp"
 #include "widget/SvgButton.hpp"
 
 namespace Widget {
@@ -26,8 +27,8 @@ namespace Widget {
             // Launcher button
             SvgButton * launcherButton;
 
-            // Favourites layout
-            QBoxLayout * favouritesLayout;
+            // Favourites bar
+            Favourites * favourites;
 
             // Back button
             SvgButton * backButton;
@@ -48,6 +49,9 @@ namespace Widget {
 
             // Toggles whether the back button is enabled.
             void setBackButtonEnabled(const bool enabled);
+
+            // Allows access to the inner favourites object.
+            Favourites * favouritesWidget();
     };
 };
 

@@ -46,25 +46,35 @@ Window::Window(std::vector<IModule *> modules, QWidget * parent) : QWidget(paren
         stack->goHome();
     });
 
+    Widget::Favourites * favourites = taskbar->favouritesWidget();
+    favourites->onEntryClicked([stack](std::string id) {
+        stack->openFrame(id);
+    });
+
     // Create the launcher
     Launcher * launcher = new Launcher(scrollArea);
     stack->setGeometry(0, 0, this->width() - taskbar->width(), this->height());
-    stack->onWidgetChanged([taskbar](int frames) {
+    stack->onFrameChanged([favourites, taskbar](std::string id, int frames) {
+        favourites->setActiveEntry(id);
         taskbar->setBackButtonEnabled(frames > 1);
     });
     scrollArea->resize(stack->size());
 
     // Process modules
     for (IModule * module : modules) {
+        IModule::Metadata meta = module->metadata();
+
         // Add widgets to the stack
         QWidget * widget = module->widget();
-        stack->addWidget(widget);
+        stack->addFrame(meta.name.toStdString(), widget);
 
         // Add entries to the launcher
-        IModule::Metadata meta = module->metadata();
-        launcher->addEntry(meta.iconPath, meta.name, meta.version, [stack, widget]() {
-            stack->goToWidget(widget);
+        launcher->addEntry(meta.iconPath, meta.name, meta.version, [meta, stack]() {
+            stack->openFrame(meta.name.toStdString());
         });
+
+        // TODO: Remove this
+        favourites->addEntry(meta.name.toStdString(), meta.iconPath.toStdString());
     }
 
     launcher->finalize(stack);

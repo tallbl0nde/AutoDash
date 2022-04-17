@@ -3,22 +3,26 @@
 namespace Widget {
     MainFrame::MainFrame(QWidget * home, QWidget * parent) : QStackedWidget(parent) {
         this->onChange = nullptr;
-        this->stack.push(home);
-        this->addWidget(home);
+        this->stack.push(Frame{"Root Launcher", home});
+        this->addFrame("Root Launcher", home);
+        this->currentID = "Root Launcher";
     }
 
-    void MainFrame::onWidgetChanged(const std::function<void(int)> & func) {
-        this->onChange = func;
+    void MainFrame::onFrameChanged(const std::function<void(std::string, int)> & callback) {
+        this->onChange = callback;
     }
 
     void MainFrame::goBack() {
-        this->setCurrentWidget(this->stack.top());
+        Frame frame = this->stack.top();
+        this->setCurrentWidget(frame.frame);
 
         if (this->stack.size() > 1) {
             this->stack.pop();
+            frame = this->stack.top();
+            this->currentID = frame.id;
             if (this->onChange != nullptr)
             {
-                this->onChange(this->stack.size());
+                this->onChange(frame.id, this->stack.size());
             }
         }
     }
@@ -28,23 +32,39 @@ namespace Widget {
             this->stack.pop();
         }
 
-        this->setCurrentWidget(this->stack.top());
+        Frame frame = this->stack.top();
+        this->currentID = frame.id;
+        this->setCurrentWidget(frame.frame);
         if (this->onChange != nullptr)
         {
-            this->onChange(this->stack.size());
+            this->onChange(frame.id, this->stack.size());
         }
     }
 
-    void MainFrame::addWidget(QWidget * widget) {
-        QStackedWidget::addWidget(widget);
+    void MainFrame::addFrame(const std::string & id, QWidget * widget) {
+        this->availableFrames.push_back(Frame{id, widget});
+        this->addWidget(widget);
     }
 
-    void MainFrame::goToWidget(QWidget * widget) {
-        this->stack.push(this->currentWidget());
-        this->setCurrentWidget(widget);
+    void MainFrame::openFrame(const std::string & id) {
+        // Find frame
+        auto it = std::find_if(this->availableFrames.begin(), this->availableFrames.end(), [id](const Frame & frame) {
+            return (frame.id == id);
+        });
+
+        if (it == this->availableFrames.end() || (*it).id == this->currentID) {
+            return;
+        }
+
+        // Store current frame
+        this->stack.push(Frame{this->currentID, this->currentWidget()});
+
+        // Set new and emit event
+        this->currentID = (*it).id;
+        this->setCurrentWidget((*it).frame);
         if (this->onChange != nullptr)
         {
-            this->onChange(this->stack.size());
+            this->onChange(this->currentID, this->stack.size());
         }
     }
 };
