@@ -10,7 +10,6 @@ set(SOURCE_DIR ${ROOT_DIR}/source)
 set(INCLUDE_DIR ${ROOT_DIR}/include)
 set(MODULES_DIR ${ROOT_DIR}/modules)
 
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${ROOT_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${ROOT_DIR}/bin)
 set(EXECUTABLE_OUTPUT_PATH ${ROOT_DIR}/bin)
 
@@ -28,8 +27,13 @@ endif()
 if (OPENAUTO_SUPPORT)
     message("Enabling OpenAuto support")
 
-    include(${ROOT_DIR}/modules/OpenAuto/cmake_modules/functions.cmake)
     set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/modules/OpenAuto/cmake_modules/")
+    include(${ROOT_DIR}/modules/OpenAuto/cmake_modules/functions.cmake)
+
+    set(Boost_USE_STATIC_LIBS OFF)
+    set(Boost_USE_MULTITHREADED ON)
+    set(Boost_USE_STATIC_RUNTIME OFF)
+
 
     add_definitions(-DBOOST_ALL_DYN_LINK)
 
@@ -67,7 +71,6 @@ if (OPENAUTO_SUPPORT)
         # If building for RPi get the Pi model
         if (RPI_BUILD)
             add_definitions(-DRPI)
-            include(${CMAKE_CURRENT_SOURCE_DIR_2}/cmake_modules/functions.cmake)
 
             findRpiRevision( RPI_REVISION )
             math(EXPR RPI_MODEL "(0x${RPI_REVISION}>>4)&0xFF")
@@ -78,7 +81,6 @@ if (OPENAUTO_SUPPORT)
         endif (RPI_BUILD)
     endif (GST_BUILD)
 
-    # Include OpenAuto includes
     set(OPENAUTO_INCLUDES
         ${Qt5WebSockets_INCLUDE_DIRS}
         ${Qt5Multimedia_INCLUDE_DIRS}
@@ -97,9 +99,9 @@ if (OPENAUTO_SUPPORT)
         ${GST_INCLUDE_DIRS}
         ${QTGSTREAMER_INCLUDE_DIR}
         ${TAGLIB_INCLUDE_DIRS}
-        )
+        ${INCLUDE_DIR}
+    )
 
-    # Include OpenAuto libraries
     set(OPENAUTO_LIBS
         aasdk_proto
         aasdk
@@ -126,11 +128,9 @@ if (OPENAUTO_SUPPORT)
         ${Qt5QuickWidgets_LIBRARIES}
         ${QTGSTREAMER_QUICK_LIBRARIES}
         ${QTGSTREAMER_QUICK_LIBRARY}
-        ${TAGLIB_LIBRARIES}
-        )
-endif (OPENAUTO_SUPPORT)
-
-find_package(Qt5 COMPONENTS Widgets DBus Xml Svg REQUIRED)
+       ${TAGLIB_LIBRARIES}
+    )
+endif(OPENAUTO_SUPPORT)
 
 link_directories(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 
@@ -147,7 +147,6 @@ target_include_directories(AutoDash SYSTEM PRIVATE
     ${Qt5Xml_INCLUDE_DIRS}
     ${Qt5DBus_INCLUDE_DIRS}
     ${Qt5Widgets_INCLUDE_DIRS}
-    ${INCLUDE_DIR}
     ${OPENAUTO_INCLUDES}
     )
 

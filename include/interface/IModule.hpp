@@ -27,7 +27,7 @@ class IModule {
 
         // Returns the widget to show when selecting
         // this module from the launcher.
-        virtual QWidget * widget() = 0;
+        virtual QWidget * widget(QWidget * parent = nullptr) = 0;
 
         // Destroys the module object.
         virtual ~IModule() {}

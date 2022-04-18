@@ -70,7 +70,7 @@ Window::Window(std::vector<IModule *> modules, QWidget * parent) : QWidget(paren
         IModule::Metadata meta = module->metadata();
 
         // Add widgets to the stack
-        QWidget * widget = module->widget();
+        QWidget * widget = module->widget(stack);
         stack->addFrame(meta.name.toStdString(), widget);
 
         // Add entries to the launcher
