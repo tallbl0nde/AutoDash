@@ -1,14 +1,6 @@
 #!/bin/bash
 # Helper script for compiling/installing/updating AutoDash.
 
-# Check if running on Raspberry Pi
-if [ -f /etc/rpi-issue ]
-then
-  RPI_BUILD="-DRPI_BUILD=true"
-else
-  RPI_BUILD=""
-fi
-
 ### COMPILE ###
 compile() {
     # Compile libraries first
@@ -26,7 +18,7 @@ compile() {
     echo Compiling AutoDash...
     mkdir -p build
     pushd ./build > /dev/null
-    cmake -DOPENAUTO_SUPPORT=true "$RPI_BUILD" -DGST_BUILD=true ..
+    cmake ..
     make -j$(nproc)
     popd > /dev/null
 }
