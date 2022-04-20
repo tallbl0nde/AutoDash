@@ -13,6 +13,7 @@ class SettingsModule : public QObject, public IModule {
         SettingsModule();
 
         // Implement IModule.
+        virtual std::string versionCompiledFor() override;
         virtual void initialize(IResolver * resolver) override;
         virtual IModule::Metadata metadata() override;
         virtual QWidget * widget(QWidget * parent) override;

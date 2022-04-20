@@ -1,8 +1,13 @@
 #include "settings/SettingsFrame.hpp"
 #include "settings/SettingsModule.hpp"
+#include "Version.hpp"
 
 SettingsModule::SettingsModule() {
     this->resolver = nullptr;
+}
+
+std::string SettingsModule::versionCompiledFor() {
+    return AUTODASH_VERSION;
 }
 
 void SettingsModule::initialize(IResolver * resolver) {

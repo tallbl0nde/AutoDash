@@ -1,5 +1,6 @@
 #include "Log.hpp"
 #include "ModuleLoader.hpp"
+#include "Version.hpp"
 
 #include <QDir>
 #include <QPluginLoader>
@@ -42,6 +43,15 @@ IModule * ModuleLoader::loadModule(const std::string & moduleFolder) {
 
     } else {
         if (moduleObject != nullptr) {
+            // Check version
+            if (moduleObject->versionCompiledFor() != AUTODASH_VERSION) {
+                Log::logWarning(QString("This module was compiled for a different version of AutoDash."));
+                Log::logWarning(QString("Various problems such as weird behaviour/bugs/crashes may occur."));
+                Log::logWarning(QString("Please update/downgrade this module ASAP."));
+                Log::logWarning(QString("AutoDash version: " AUTODASH_VERSION));
+                Log::logWarning("Module version: " + moduleObject->versionCompiledFor());
+            }
+
             moduleObject->initialize(this->resolver);
 
             Log::logInfo(std::string("Loaded module successfully!"));

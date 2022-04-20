@@ -24,6 +24,10 @@ class IModule {
         // Creates a new module object.
         IModule() {}
 
+        // Returns the version of AutoDash the module was compiled for.
+        // This method should be implemented to return Version::version().
+        virtual std::string versionCompiledFor() = 0;
+
         // Initializes the module.
         // This should always be called straight after creation.
         virtual void initialize(IResolver * resolver) = 0;
