@@ -4,8 +4,9 @@
 #include <QDir>
 #include <QPluginLoader>
 
-ModuleLoader::ModuleLoader(const std::string & modulesFolder) {
+ModuleLoader::ModuleLoader(IResolver * resolver, const std::string & modulesFolder) {
     this->modulesFolder = modulesFolder;
+    this->resolver = resolver;
 }
 
 std::vector<IModule *> ModuleLoader::loadAllModules() {
@@ -41,6 +42,8 @@ IModule * ModuleLoader::loadModule(const std::string & moduleFolder) {
 
     } else {
         if (moduleObject != nullptr) {
+            moduleObject->initialize(this->resolver);
+
             Log::logInfo(std::string("Loaded module successfully!"));
             Log::logInfo("Name:       " + moduleObject->metadata().name);
             Log::logInfo("Author:     " + moduleObject->metadata().author);

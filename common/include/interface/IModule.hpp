@@ -5,6 +5,8 @@
 #include <QtPlugin>
 #include <QString>
 
+#include "IResolver.hpp"
+
 // Unique identifier for this interface.
 #define IMODULE_IID "tallbl0nde.AutoDash.IModule"
 
@@ -21,6 +23,10 @@ class IModule {
 
         // Creates a new module object.
         IModule() {}
+
+        // Initializes the module.
+        // This should always be called straight after creation.
+        virtual void initialize(IResolver * resolver) = 0;
 
         // Returns the metadata for the module.
         virtual Metadata metadata() = 0;

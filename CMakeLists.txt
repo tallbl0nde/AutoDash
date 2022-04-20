@@ -8,6 +8,8 @@ set(ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(RESOURCES_DIR ${ROOT_DIR}/resources)
 set(SOURCE_DIR ${ROOT_DIR}/source)
 set(INCLUDE_DIR ${ROOT_DIR}/include)
+set(COMMON_INCLUDE_DIR ${ROOT_DIR}/common/include)
+set(COMMON_SOURCE_DIR ${ROOT_DIR}/common/source)
 set(MODULES_DIR ${ROOT_DIR}/modules)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${ROOT_DIR}/bin)
@@ -27,7 +29,7 @@ find_package(Qt5 COMPONENTS Widgets DBus Xml Svg REQUIRED)
 
 link_directories(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 
-file(GLOB_RECURSE source_files ${SOURCE_DIR}/*.cpp ${INCLUDE_DIR}/*.hpp ${RESOURCES_DIR}/*.qrc)
+file(GLOB_RECURSE source_files ${COMMON_SOURCE_DIR}/*.cpp ${COMMON_INCLUDE_DIR}/*.hpp ${SOURCE_DIR}/*.cpp ${INCLUDE_DIR}/*.hpp ${RESOURCES_DIR}/*.qrc)
 
 add_executable(AutoDash ${source_files})
 
@@ -41,6 +43,7 @@ target_include_directories(AutoDash SYSTEM PRIVATE
     ${Qt5DBus_INCLUDE_DIRS}
     ${Qt5Widgets_INCLUDE_DIRS}
     ${INCLUDE_DIR}
+    ${COMMON_INCLUDE_DIR}
     )
 
 target_link_libraries(AutoDash

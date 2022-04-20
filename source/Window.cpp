@@ -3,7 +3,6 @@
 #include <QStackedWidget>
 
 #include "factory/ConfigFactory.hpp"
-#include "interface/IModule.hpp"
 #include "Launcher.hpp"
 #include "widget/MainFrame.hpp"
 #include "widget/Taskbar.hpp"
@@ -65,7 +64,11 @@ Window::Window(std::vector<IModule *> modules, QWidget * parent) : QWidget(paren
     });
     scrollArea->resize(stack->size());
 
-    // Process modules
+    // Process modules in alphabetical order
+    std::sort(modules.begin(), modules.end(), [](IModule * lhs, IModule * rhs) {
+        return (lhs->metadata().name < rhs->metadata().name);
+    });
+
     for (IModule * module : modules) {
         IModule::Metadata meta = module->metadata();
 

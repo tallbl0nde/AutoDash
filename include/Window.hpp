@@ -4,9 +4,7 @@
 #include <QWidget>
 #include <vector>
 
-#include "Log.hpp"
-
-class IModule;
+#include "interface/IModule.hpp"
 
 // Root application object.
 class Window : public QWidget {
