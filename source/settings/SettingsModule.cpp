@@ -25,7 +25,7 @@ IModule::Metadata SettingsModule::metadata() {
 
 QWidget * SettingsModule::widget(QWidget * parent) {
     Template::IHeaderPage * headerPage = this->resolver->templateProvider()->createHeaderPage();
-    SettingsFrame * settingsFrame = new SettingsFrame(headerPage);
+    SettingsFrame * settingsFrame = new SettingsFrame(headerPage, this->resolver);
     return headerPage->widget();
 }
 

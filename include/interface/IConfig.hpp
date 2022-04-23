@@ -1,6 +1,7 @@
 #ifndef INTERFACE_ICONFIG_HPP
 #define INTERFACE_ICONFIG_HPP
 
+#include <algorithm>
 #include <functional>
 #include <string>
 #include <vector>
@@ -29,25 +30,22 @@ class IConfig {
         // --- EVENT HANDLERS ---
 
         // Event handlers to invoke when backgroundImageFilePath is changed.
-        std::vector<std::pair<StringHandler, InvokeRequest>> backgroundImageFilePathHandlers;
+        std::vector<std::tuple<std::string, StringHandler, InvokeRequest>> backgroundImageFilePathHandlers;
 
         // Event handlers to invoke when modulesFolderPath is changed.
-        std::vector<std::pair<StringHandler, InvokeRequest>> modulesFolderPathHandlers;
-
-        // Event handlers to invoke when resourcesFolderPath is changed.
-        std::vector<std::pair<StringHandler, InvokeRequest>> resourcesFolderPathHandlers;
+        std::vector<std::tuple<std::string, StringHandler, InvokeRequest>> modulesFolderPathHandlers;
 
         // Event handlers to invoke when fontFamily is changed.
-        std::vector<std::pair<StringHandler, InvokeRequest>> fontFamilyHandlers;
+        std::vector<std::tuple<std::string, StringHandler, InvokeRequest>> fontFamilyHandlers;
 
         // Event handlers to invoke when fontSize is changed.
-        std::vector<std::pair<IntHandler, InvokeRequest>> fontSizeHandlers;
+        std::vector<std::tuple<std::string, IntHandler, InvokeRequest>> fontSizeHandlers;
 
         // Event handlers to invoke when backgroundColour is changed.
-        std::vector<std::pair<ColourHandler, InvokeRequest>> backgroundColourHandlers;
+        std::vector<std::tuple<std::string, ColourHandler, InvokeRequest>> backgroundColourHandlers;
 
         // Event handlers to invoke when mainTextColour is changed.
-        std::vector<std::pair<ColourHandler, InvokeRequest>> mainTextColourHandlers;
+        std::vector<std::tuple<std::string, ColourHandler, InvokeRequest>> mainTextColourHandlers;
 
     protected:
         // --- EVENT RAISERS ---
@@ -55,8 +53,8 @@ class IConfig {
         // Raises the BackgroundImageFilePathChanged event.
         void raiseBackgroundImageFilePathChanged(const std::string str) {
             for (auto & entry : this->backgroundImageFilePathHandlers) {
-                if (entry.second()) {
-                    entry.first(str);
+                if (std::get<2>(entry)) {
+                    std::get<1>(entry)(str);
                 }
             }
         }
@@ -64,17 +62,8 @@ class IConfig {
         // Raises the ModulesFolderPathChanged event.
         void raiseModulesFolderPathChanged(const std::string str) {
             for (auto & entry : this->modulesFolderPathHandlers) {
-                if (entry.second()) {
-                    entry.first(str);
-                }
-            }
-        }
-
-        // Raises the ResourcesFolderPathChanged event.
-        void raiseResourcesFolderPathChanged(const std::string str) {
-            for (auto & entry : this->resourcesFolderPathHandlers) {
-                if (entry.second()) {
-                    entry.first(str);
+                if (std::get<2>(entry)) {
+                    std::get<1>(entry)(str);
                 }
             }
         }
@@ -82,8 +71,8 @@ class IConfig {
         // Raises the FontFamilyChanged event.
         void raiseFontFamilyChanged(const std::string str) {
             for (auto & entry : this->fontFamilyHandlers) {
-                if (entry.second()) {
-                    entry.first(str);
+                if (std::get<2>(entry)) {
+                    std::get<1>(entry)(str);
                 }
             }
         }
@@ -91,8 +80,8 @@ class IConfig {
         // Raises the FontSizeChanged event.
         void raiseFontSizeChanged(const int value) {
             for (auto & entry : this->fontSizeHandlers) {
-                if (entry.second()) {
-                    entry.first(value);
+                if (std::get<2>(entry)) {
+                    std::get<1>(entry)(value);
                 }
             }
         }
@@ -100,8 +89,8 @@ class IConfig {
         // Raises the BackgroundColourChanged event.
         void raiseBackgroundColourChanged(const Colour colour) {
             for (auto & entry : this->backgroundColourHandlers) {
-                if (entry.second()) {
-                    entry.first(colour);
+                if (std::get<2>(entry)) {
+                    std::get<1>(entry)(colour);
                 }
             }
         }
@@ -109,8 +98,8 @@ class IConfig {
         // Raises the MainTextColourChanged event.
         void raiseMainTextColourChanged(const Colour colour) {
             for (auto & entry : this->mainTextColourHandlers) {
-                if (entry.second()) {
-                    entry.first(colour);
+                if (std::get<2>(entry) ) {
+                    std::get<1>(entry)(colour);
                 }
             }
         }
@@ -127,11 +116,6 @@ class IConfig {
         virtual std::string modulesFolderPath() = 0;
         // Sets the modules folder path.
         virtual bool setModulesFolderPath(const std::string) = 0;
-
-        // Gets the resources folder path.
-        virtual std::string resourcesFolderPath() = 0;
-        // Sets the resources folder path.
-        virtual bool setResourcesFolderPath(const std::string) = 0;
 
         // Returns the font family to use.
         virtual std::string fontFamily() = 0;
@@ -155,61 +139,75 @@ class IConfig {
 
         // --- AGGREGATE VALUES ---
 
-        // Returns the backgrounds folder path.
-        std::string backgroundsFolderPath() {
-           return this->resourcesFolderPath() + "/backgrounds/";
-        }
-
-        // Returns the fonts folder path.
-        std::string fontsFolderPath() {
-            return this->resourcesFolderPath() + "/fonts/";
-        }
-
-        // Returns the icons folder path.
-        std::string iconsFolderPath() {
-            return this->resourcesFolderPath() + "/icons/";
-        }
-
         // Destroys the IConfig object.
-        virtual ~IConfig() {
-
-        }
+        virtual ~IConfig() {}
 
         // --- EVENT HANDLER REGISTRATIONS ---
 
         // Registers an event handler with the BackgroundImageFilePathChanged event.
-        void onBackgroundImageFilePathChanged(const StringHandler & handler, const InvokeRequest & canInvoke) {
-            this->backgroundImageFilePathHandlers.push_back(std::make_pair(handler, canInvoke));
+        void onBackgroundImageFilePathChanged(const std::string & identifier, const StringHandler & handler, const InvokeRequest & canInvoke) {
+            if (handler == nullptr || canInvoke == nullptr) {
+                this->backgroundImageFilePathHandlers.erase(std::remove_if(this->backgroundImageFilePathHandlers.begin(), this->backgroundImageFilePathHandlers.end(), [identifier](const std::tuple<std::string, StringHandler, InvokeRequest> & entry) {
+                    return std::get<0>(entry) == identifier;
+                }));
+            }
+
+            this->backgroundImageFilePathHandlers.push_back(std::make_tuple(identifier, handler, canInvoke));
         }
 
         // Registers an event handler with the ModulesFolderPathChanged event.
-        void onModulesFolderPathChanged(const StringHandler & handler, const InvokeRequest & canInvoke) {
-            this->modulesFolderPathHandlers.push_back(std::make_pair(handler, canInvoke));
-        }
+        void onModulesFolderPathChanged(const std::string & identifier, const StringHandler & handler, const InvokeRequest & canInvoke) {
+            if (handler == nullptr || canInvoke == nullptr) {
+                this->modulesFolderPathHandlers.erase(std::remove_if(this->modulesFolderPathHandlers.begin(), this->modulesFolderPathHandlers.end(), [identifier](const std::tuple<std::string, StringHandler, InvokeRequest> & entry) {
+                    return std::get<0>(entry) == identifier;
+                }));
+            }
 
-        // Registers an event handler with the ResourcesFolderPathChanged event.
-        void onResourcesFolderPathChanged(const StringHandler & handler, const InvokeRequest & canInvoke) {
-            this->resourcesFolderPathHandlers.push_back(std::make_pair(handler, canInvoke));
+            this->modulesFolderPathHandlers.push_back(std::make_tuple(identifier, handler, canInvoke));
         }
 
         // Registers an event handler with the FontFamilyChanged event.
-        void onFontFamilyChanged(const StringHandler & handler, const InvokeRequest & canInvoke) {
-            this->fontFamilyHandlers.push_back(std::make_pair(handler, canInvoke));
+        void onFontFamilyChanged(const std::string & identifier, const StringHandler & handler, const InvokeRequest & canInvoke) {
+            if (handler == nullptr || canInvoke == nullptr) {
+                this->fontFamilyHandlers.erase(std::remove_if(this->fontFamilyHandlers.begin(), this->fontFamilyHandlers.end(), [identifier](const std::tuple<std::string, StringHandler, InvokeRequest> & entry) {
+                    return std::get<0>(entry) == identifier;
+                }));
+            }
+
+            this->fontFamilyHandlers.push_back(std::make_tuple(identifier, handler, canInvoke));
         }
 
         // Registers an event handler with the FontSizeChanged event.
-        void onFontSizeChanged(const IntHandler & handler, const InvokeRequest & canInvoke) {
-            this->fontSizeHandlers.push_back(std::make_pair(handler, canInvoke));
+        void onFontSizeChanged(const std::string & identifier, const IntHandler & handler, const InvokeRequest & canInvoke) {
+            if (handler == nullptr || canInvoke == nullptr) {
+                this->fontSizeHandlers.erase(std::remove_if(this->fontSizeHandlers.begin(), this->fontSizeHandlers.end(), [identifier](const std::tuple<std::string, IntHandler, InvokeRequest> & entry) {
+                    return std::get<0>(entry) == identifier;
+                }));
+            }
+
+            this->fontSizeHandlers.push_back(std::make_tuple(identifier, handler, canInvoke));
         }
 
         // Registers an event handler with the BackgroundColourChanged event.
-        void onBackgroundColourChanged(const ColourHandler & handler, const InvokeRequest & canInvoke) {
-            this->backgroundColourHandlers.push_back(std::make_pair(handler, canInvoke));
+        void onBackgroundColourChanged(const std::string & identifier, const ColourHandler & handler, const InvokeRequest & canInvoke) {
+            if (handler == nullptr || canInvoke == nullptr) {
+                this->backgroundColourHandlers.erase(std::remove_if(this->backgroundColourHandlers.begin(), this->backgroundColourHandlers.end(), [identifier](const std::tuple<std::string, ColourHandler, InvokeRequest> & entry) {
+                    return std::get<0>(entry) == identifier;
+                }));
+            }
+
+            this->backgroundColourHandlers.push_back(std::make_tuple(identifier, handler, canInvoke));
         }
 
         // Registers an event handler with the MainTextColourChanged event.
-        void onMainTextColourChanged(const ColourHandler & handler, const InvokeRequest & canInvoke) {
-            this->mainTextColourHandlers.push_back(std::make_pair(handler, canInvoke));
+        void onMainTextColourChanged(const std::string & identifier, const ColourHandler & handler, const InvokeRequest & canInvoke) {
+            if (handler == nullptr || canInvoke == nullptr) {
+                this->mainTextColourHandlers.erase(std::remove_if(this->mainTextColourHandlers.begin(), this->mainTextColourHandlers.end(), [identifier](const std::tuple<std::string, ColourHandler, InvokeRequest> & entry) {
+                    return std::get<0>(entry) == identifier;
+                }));
+            }
+
+            this->mainTextColourHandlers.push_back(std::make_tuple(identifier, handler, canInvoke));
         }
 };
 

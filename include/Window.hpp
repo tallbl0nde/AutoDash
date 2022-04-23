@@ -12,7 +12,9 @@ class Window : public QWidget {
 
     public:
         // Constructs a new window.
-        explicit Window(std::vector<IModule *> modules, QWidget * parent = nullptr);
+        explicit Window(QWidget * parent = nullptr);
+
+        void initialize(std::vector<IModule *> modules);
 };
 
 #endif

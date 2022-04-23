@@ -10,6 +10,7 @@ class TemplateProvider : public ITemplateProvider {
         TemplateProvider();
 
         // Implement ITemplateProvider.
+        Template::IButton * createButton() override;
         Template::IHeaderPage * createHeaderPage() override;
 };
 

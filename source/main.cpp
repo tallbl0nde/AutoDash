@@ -15,6 +15,7 @@ int main(int argc, char * argv[]) {
     QApplication app(argc, argv);
     app.setOrganizationName("tallbl0nde");
     app.setApplicationName("AutoDash");
+    Window * w = new Window();
 
     // Initialize resources
     ConfigFactory configFactory;
@@ -38,6 +39,7 @@ int main(int argc, char * argv[]) {
     // Initialize the resolver and the objects it resolves
     Resolver * resolver = new Resolver();
     resolver->setTemplateProvider(new TemplateProvider());
+    resolver->setWindow(w);
 
     // Load any installed modules
     ModuleLoader moduleLoader = ModuleLoader(resolver, config->modulesFolderPath());
@@ -57,7 +59,7 @@ int main(int argc, char * argv[]) {
     modules.insert(modules.end(), realModules.begin(), realModules.end());
 
     // Create and show the main window
-    Window * w = new Window(modules);
+    w->initialize(modules);
 #ifdef RPI_BUILD
     w->setWindowState(Qt::WindowFullScreen);
 #endif

@@ -10,15 +10,17 @@
 
 #include "Log.hpp"
 
-Window::Window(std::vector<IModule *> modules, QWidget * parent) : QWidget(parent) {
-    // Get config object
-    ConfigFactory configFactory;
-    IConfig * config = configFactory.getConfig();
-
+Window::Window(QWidget * parent) : QWidget(parent) {
     // Force resize to 800x480
     // TODO: Remove the forced size, scale dynamically
     this->resize(800, 480);
     this->setStyleSheet("background: transparent");
+}
+
+void Window::initialize(std::vector<IModule *> modules) {
+    // Get config object
+    ConfigFactory configFactory;
+    IConfig * config = configFactory.getConfig();
 
     // Set the background of the window
     QWidget * background = new QWidget(this);

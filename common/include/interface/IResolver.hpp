@@ -10,6 +10,9 @@ class IResolver {
         // Returns the TemplateProvider.
         virtual ITemplateProvider * templateProvider() = 0;
 
+        // Returns the main window widget.
+        virtual QWidget * window() = 0;
+
         virtual ~IResolver() {};
 };
 

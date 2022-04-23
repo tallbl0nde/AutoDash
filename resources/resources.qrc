@@ -7,4 +7,11 @@
         <file>icons/back.svg</file>
         <file>icons/launcher.svg</file>
     </qresource>
+
+    <qresource>
+        <file>Settings/icons/minimize.svg</file>
+        <file>Settings/icons/restart.svg</file>
+        <file>Settings/icons/settings.svg</file>
+        <file>Settings/icons/shutdown.svg</file>
+    </qresource>
 </RCC>
