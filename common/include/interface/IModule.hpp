@@ -5,7 +5,8 @@
 #include <QtPlugin>
 #include <QString>
 
-#include "IResolver.hpp"
+#include "interface/factory/ISettingEntryFactory.hpp"
+#include "interface/IResolver.hpp"
 
 // Unique identifier for this interface.
 #define IMODULE_IID "tallbl0nde.AutoDash.IModule"
@@ -34,6 +35,10 @@ class IModule {
 
         // Returns the metadata for the module.
         virtual Metadata metadata() = 0;
+
+        // Returns the setting entries for the module.
+        // Order is important (first will be listed first).
+        virtual std::vector<ISettingEntry *> settingEntries(ISettingEntryFactory *) = 0;
 
         // Returns the widget to show when selecting
         // this module from the launcher.

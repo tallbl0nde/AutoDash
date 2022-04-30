@@ -1,7 +1,6 @@
 #ifndef RESOLVER_HPP
 #define RESOLVER_HPP
 
-#include "interface/ITemplateProvider.hpp"
 #include "interface/IResolver.hpp"
 
 // Resolve optional dependencies for modules.

@@ -66,7 +66,7 @@ void Window::initialize(std::vector<IModule *> modules) {
     });
     scrollArea->resize(stack->size());
 
-    // Process modules in alphabetical order
+    // Process modules in alphabetical order (should already be sorted but just in case)
     std::sort(modules.begin(), modules.end(), [](IModule * lhs, IModule * rhs) {
         return (lhs->metadata().name < rhs->metadata().name);
     });

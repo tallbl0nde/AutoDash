@@ -3,6 +3,7 @@
 #include <QFontDatabase>
 
 #include "factory/ConfigFactory.hpp"
+#include "factory/SettingEntryFactory.hpp"
 #include "Log.hpp"
 #include "ModuleLoader.hpp"
 #include "Resolver.hpp"
@@ -57,6 +58,18 @@ int main(int argc, char * argv[]) {
     modules.reserve(fakeModules.size() + realModules.size());
     modules.insert(modules.end(), fakeModules.begin(), fakeModules.end());
     modules.insert(modules.end(), realModules.begin(), realModules.end());
+
+    // Add settings to the SettingsModule (alphabetically)
+    std::sort(modules.begin(), modules.end(), [](IModule * lhs, IModule * rhs) {
+        return (lhs->metadata().name < rhs->metadata().name);
+    });
+
+    std::vector<std::vector<ISettingEntry *>> moduleSettingEntries;
+    for (IModule * module : modules) {
+        moduleSettingEntries.push_back(module->settingEntries(new SettingEntryFactory()));
+    }
+
+    settingsModule->setModuleSettingEntries(moduleSettingEntries);
 
     // Create and show the main window
     w->initialize(modules);
