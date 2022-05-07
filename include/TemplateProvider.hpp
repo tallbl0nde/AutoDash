@@ -12,6 +12,8 @@ class TemplateProvider : public ITemplateProvider {
         // Implement ITemplateProvider.
         Template::IButton * createButton() override;
         Template::IHeaderPage * createHeaderPage() override;
+        Template::IHorizontalDoubleSlider * createHorizontalDoubleSlider() override;
+        Template::IHorizontalIntSlider * createHorizontalIntSlider() override;
 };
 
 #endif
