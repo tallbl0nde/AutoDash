@@ -2,11 +2,12 @@
 #define SETTINGS_SETTINGSMODULE_HPP
 
 #include "interface/IModule.hpp"
+#include "settings/SettingsFrame.hpp"
 
 class SettingsModule : public QObject, public IModule {
     private:
         // Module setting entries.
-        std::vector<std::vector<ISettingEntry *>> moduleSettingEntries_;
+        std::vector<SettingsFrame::ModuleSettingsData> moduleSettingsData_;
 
         // Resolver object.
         IResolver * resolver;
@@ -16,7 +17,7 @@ class SettingsModule : public QObject, public IModule {
         SettingsModule();
 
         // Store setting entries for each module.
-        void setModuleSettingEntries(std::vector<std::vector<ISettingEntry *>> moduleSettingEntries);
+        void setModuleSettingEntries(std::vector<SettingsFrame::ModuleSettingsData> moduleSettingEntryData);
 
         // Implement IModule.
         virtual std::string versionCompiledFor() override;

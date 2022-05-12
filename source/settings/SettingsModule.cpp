@@ -6,8 +6,8 @@ SettingsModule::SettingsModule() {
     this->resolver = nullptr;
 }
 
-void SettingsModule::setModuleSettingEntries(std::vector<std::vector<ISettingEntry *>> moduleSettingEntries) {
-    this->moduleSettingEntries_ = moduleSettingEntries;
+void SettingsModule::setModuleSettingEntries(std::vector<SettingsFrame::ModuleSettingsData> moduleSettingsData) {
+    this->moduleSettingsData_ = moduleSettingsData;
 }
 
 std::string SettingsModule::versionCompiledFor() {
@@ -34,7 +34,7 @@ std::vector<ISettingEntry *> SettingsModule::settingEntries(ISettingEntryFactory
 
 QWidget * SettingsModule::widget(QWidget * parent) {
     Template::IHeaderPage * headerPage = this->resolver->templateProvider()->createHeaderPage();
-    SettingsFrame * settingsFrame = new SettingsFrame(headerPage, this->moduleSettingEntries_, this->resolver);
+    SettingsFrame * settingsFrame = new SettingsFrame(headerPage, this->moduleSettingsData_, this->resolver);
     return headerPage->widget();
 }
 

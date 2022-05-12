@@ -14,6 +14,10 @@ class TemplateProvider : public ITemplateProvider {
         Template::IHeaderPage * createHeaderPage() override;
         Template::IHorizontalDoubleSlider * createHorizontalDoubleSlider() override;
         Template::IHorizontalIntSlider * createHorizontalIntSlider() override;
+        Template::IList * createList() override;
+        Template::IListButton * createListButton() override;
+        Template::IListSeparator * createListSeparator() override;
+        Template::IListSpacer * createListSpacer() override;
 };
 
 #endif

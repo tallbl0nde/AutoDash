@@ -64,12 +64,15 @@ int main(int argc, char * argv[]) {
         return (lhs->metadata().name < rhs->metadata().name);
     });
 
-    std::vector<std::vector<ISettingEntry *>> moduleSettingEntries;
+    SettingEntryFactory * settingEntryFactory = new SettingEntryFactory();
+    std::vector<SettingsFrame::ModuleSettingsData> moduleSettingEntries;
     for (IModule * module : modules) {
-        moduleSettingEntries.push_back(module->settingEntries(new SettingEntryFactory()));
+        SettingsFrame::ModuleSettingsData data = {module->metadata(), module->settingEntries(settingEntryFactory)};
+        moduleSettingEntries.push_back(data);
     }
 
     settingsModule->setModuleSettingEntries(moduleSettingEntries);
+    delete settingEntryFactory;
 
     // Create and show the main window
     w->initialize(modules);

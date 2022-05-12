@@ -24,7 +24,8 @@ namespace Template {
 
         // Set up the layout
         this->mainLayout = new QVBoxLayout(this);
-        this->mainLayout->setMargin(30);
+        this->mainLayout->setContentsMargins(30, 30, 30, 0);
+        this->mainLayout->setSpacing(0);
         this->mainLayout->addWidget(headerWidget);
         this->mainLayout->addSpacing(20);
 
