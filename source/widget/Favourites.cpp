@@ -6,8 +6,6 @@
 
 namespace Widget {
     Favourites::Favourites(Orientation orientation, QWidget * parent) : QWidget(parent) {
-        this->onEntryClickedCallback = nullptr;
-
         // Create layout based on orientation
         switch (orientation) {
             case Favourites::Orientation::Horizontal:
@@ -49,10 +47,8 @@ namespace Widget {
     void Favourites::addEntry(const std::string & id, const std::string & svgPath) {
         // Create SvgButton for entry
         SvgButton * button = new SvgButton(QString::fromStdString(svgPath));
-        button->onClicked([this, id]() {
-            if (this->onEntryClickedCallback != nullptr) {
-                this->onEntryClickedCallback(id);
-            }
+        connect(button, &SvgButton::released, this, [this, id]() {
+            emit this->entryClicked(id);
         });
         button->setFixedSize(60, 60);
         button->setPaddingPercentage(15);
@@ -106,9 +102,5 @@ namespace Widget {
         QWidget * widget = (*it).button;
         this->highlightMidpoint = QPoint(this->x() + this->width(), widget->y() + widget->height()/2);
         this->update();
-    }
-
-    void Favourites::onEntryClicked(const std::function<void(std::string)> callback) {
-        this->onEntryClickedCallback = callback;
     }
 };

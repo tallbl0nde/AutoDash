@@ -21,9 +21,9 @@ Launcher::Launcher(QWidget * parent) : QWidget(parent) {
 void Launcher::addEntry(const QString iconPath, const QString name, const QString version, const std::function<void()> & onPress) {
     // Add a widget for the entry
     Widget::LauncherEntry * module = new Widget::LauncherEntry();
-    module->setLabel(name);
+    module->setLabelText(name);
     module->setSVG(iconPath);
-    module->onClicked(onPress);
+    connect(module, &Widget::LauncherEntry::released, this, onPress);
 
     // TODO: Scale with window size
     module->setFixedHeight(90);

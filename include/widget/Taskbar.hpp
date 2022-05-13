@@ -41,17 +41,19 @@ namespace Widget {
             // Constructs a new taskbar with the given orientation.
             Taskbar(Orientation orientation, QWidget * parent = nullptr);
 
-            // Assigns a callback to invoke when the back button is pressed.
-            void onBackButtonClicked(const std::function<void()> callback);
+            // Allows access to the inner favourites object.
+            Favourites * favouritesWidget();
 
-            // Assigns a callback to invoke when the launcher button is pressed.
-            void onLauncherButtonClicked(const std::function<void()> callback);
-
+        public slots:
             // Toggles whether the back button is enabled.
             void setBackButtonEnabled(const bool enabled);
 
-            // Allows access to the inner favourites object.
-            Favourites * favouritesWidget();
+        signals:
+            // Signal emitted when the back button is pressed.
+            void backButtonClicked();
+
+            // Signal emitted when the launcher button is pressed.
+            void launcherButtonClicked();
     };
 };
 

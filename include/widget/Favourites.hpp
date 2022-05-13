@@ -25,9 +25,6 @@ namespace Widget {
             };
 
         private:
-            // Callback to invoke when an entry is clicked.
-            std::function<void(std::string)> onEntryClickedCallback;
-
             // List of all entries in the layout.
             std::vector<Entry> entries;
 
@@ -57,9 +54,10 @@ namespace Widget {
             // Sets the given entry as 'active'.
             void setActiveEntry(const std::string & id);
 
-            // Assigns a handler for the 'onEntryClicked' event.
-            void onEntryClicked(const std::function<void(std::string)> callback);
-
+        signals:
+            // Signal emitted when an entry is clicked.
+            // Passed the ID of the entry clicked.
+            void entryClicked(std::string id);
     };
 };
 

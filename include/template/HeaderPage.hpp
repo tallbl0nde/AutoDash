@@ -10,12 +10,11 @@
 
 namespace Template {
     // Template for a page with a heading in the top-left.
-    class HeaderPage : public IHeaderPage, public QWidget {
-        private:
-            // Unique identifier
-            static long nextID;
-            std::string ID;
+    class HeaderPage : public QWidget, public IHeaderPage {
+        Q_OBJECT
+        Q_INTERFACES(Template::IHeaderPage)
 
+        private:
             // Heading layout
             QHBoxLayout * headerLayout;
 
@@ -31,26 +30,18 @@ namespace Template {
             // Main (user-set) widget.
             QWidget * mainWidget;
 
-            // Handle FontFamilyChanged event.
-            void onFontFamilyChanged(const std::string & fontFamily);
-
-            // Handle FontSizeChanged event.
-            void onFontSizeChanged(const int fontSize);
-
-            // Handle MainTextColourChanged event.
-            void onMainTextColourChanged(const IConfig::Colour & mainTextColour);
-
         public:
             // Constructs a new HeaderPage.
             HeaderPage(QWidget * parent = nullptr);
 
-            ~HeaderPage();
+            // Implement IHeaderPage.
+            QWidget * widget() override;
 
+        public slots:
             // Implement IHeaderPage.
             void setHeadingText(const std::string & text) override;
             void setIcon(QWidget * icon) override;
             void setMainWidget(QWidget * widget) override;
-            QWidget * widget() override;
     };
 };
 

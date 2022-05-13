@@ -8,17 +8,17 @@
 #include <QResizeEvent>
 #include <QSvgWidget>
 
-#include "interface/IClickable.hpp"
+#include "widget/BaseClickable.hpp"
 
 namespace Widget {
     // Widget representing a module. It consists of a background,
     // icon and label.
-    class LauncherEntry : public IClickable {
+    class LauncherEntry : public BaseClickable {
         Q_OBJECT
 
         private:
-            // Background colour.
-            QColor backgroundColour;
+            // Background corner radius.
+            static int BackgroundCornerRadius;
 
             // Layout.
             QLayout * layout;
@@ -29,15 +29,6 @@ namespace Widget {
             // SVG icon.
             QSvgWidget * svg;
 
-            // Callback to invoke when the widget is clicked/pressed.
-            std::function<void()> onClickedCallback;
-
-            // Returns the font.
-            QFont labelFont();
-
-            // Returns the stylesheet for the label.
-            QString labelStylesheet();
-
         protected:
             // Overload to draw background.
             void paintEvent(QPaintEvent * event) override;
@@ -45,24 +36,19 @@ namespace Widget {
             // Overload to adjust svg size.
             void resizeEvent(QResizeEvent * event) override;
 
-            // Implement IClickable methods.
-            void onClick() override;
-            void onRegainedFocus() override;
-            void onLostFocus() override;
-            void onRelease() override;
-
         public:
             // Constructs a new LauncherEntry.
-            explicit LauncherEntry(QWidget * parent = nullptr);
+            LauncherEntry(QWidget * parent = nullptr);
 
-            // Sets the method to invoke when clicked/pressed.
-            void onClicked(const std::function<void()> &);
-
-            // Sets the label text.
-            void setLabel(QString label);
+        public slots:
+            // Sets the label colour.
+            void setLabelColour(QColor colour);
 
             // Sets the label style.
-            void setLabelStyle(QFont & font, QString & stylesheet);
+            void setLabelFont(QFont font);
+
+            // Sets the label text.
+            void setLabelText(QString label);
 
             // Sets the SVG icon.
             void setSVG(QString svg);

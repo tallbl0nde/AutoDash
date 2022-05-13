@@ -22,9 +22,9 @@ SettingsFrame::SettingsFrame(Template::IHeaderPage * parent, std::vector<ModuleS
     Template::IListSpacer * spacer = resolver->templateProvider()->createListSpacer();
     list->addItem(spacer);
 
-    for (size_t i = 0; i < 20; i++) {
+    for (size_t i = 0; i < 3; i++) {
         Template::IListButton * test = resolver->templateProvider()->createListButton();
-        connect(dynamic_cast<QObject *>(test), SIGNAL(pressed()), this, SLOT(onTestPressed()));
+        connect(dynamic_cast<QObject *>(test), SIGNAL(clicked()), this, SLOT(on()));        // TODO: Try and use a lambda somehow (probably add lambda to vector and assign object address as key?)
         test->setLabel("Android Auto Test");
         test->setIcon(new QSvgWidget(":/OpenAuto/icons/android-auto.svg"));
         list->addItem(test);
@@ -107,8 +107,4 @@ SettingsFrame::SettingsFrame(Template::IHeaderPage * parent, std::vector<ModuleS
     // sliderRowWidget->addWidget(slider->widget());
 
     // parent->setMainWidget(child);
-}
-
-void SettingsFrame::onTestPressed() {
-    std::cout << "CLICK!" << std::endl;
 }

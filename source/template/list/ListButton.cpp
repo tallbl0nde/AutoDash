@@ -5,8 +5,7 @@
 #include "template/list/ListButton.hpp"
 
 namespace Template {
-    ListButton::ListButton(QWidget * parent) : IClickable(parent) {
-        this->clickedColour = QColor(255, 255, 255, 0);
+    ListButton::ListButton(QWidget * parent) : BaseClickable(parent) {
         this->icon = nullptr;
         this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         this->setFixedHeight(80);
@@ -37,33 +36,8 @@ namespace Template {
         this->layout->addWidget(arrow, 0, Qt::AlignVCenter);
     }
 
-    void ListButton::paintEvent(QPaintEvent * event) {
-        Q_UNUSED(event);
-
-        QPainter painter(this);
-        painter.setRenderHint(QPainter::Antialiasing);
-        painter.fillRect(this->rect(), this->clickedColour);
-    }
-
-    void ListButton::onClick() {
-        this->clickedColour.setAlpha(40);
-        this->update();
-    }
-
-    void ListButton::onRegainedFocus() {
-        this->clickedColour.setAlpha(40);
-        this->update();
-    }
-
-    void ListButton::onLostFocus() {
-        this->clickedColour.setAlpha(0);
-        this->update();
-    }
-
-    void ListButton::onRelease() {
-        this->clickedColour.setAlpha(0);
-        this->update();
-        emit pressed();
+    QWidget * ListButton::widget() {
+        return this;
     }
 
     void ListButton::setIcon(QWidget * icon) {
@@ -82,9 +56,5 @@ namespace Template {
 
     void ListButton::setLabel(const std::string label) {
         this->label->setText(QString::fromStdString(label));
-    }
-
-    QWidget * ListButton::widget() {
-        return this;
     }
 };

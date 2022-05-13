@@ -17,10 +17,6 @@ class SettingsFrame : public QWidget {
             std::vector<ISettingEntry *> settingEntries;
         };
 
-    private slots:
-        // TODO: Remove
-        void onTestPressed();
-
     public:
         // Constructs a new SettingsFrame.
         SettingsFrame(Template::IHeaderPage * parent, std::vector<ModuleSettingsData> moduleSettingData, IResolver * resolver);

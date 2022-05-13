@@ -3,16 +3,15 @@
 
 #include <string>
 
+#include "interface/IClickable.hpp"
 #include "interface/template/list/IListItem.hpp"
 
 namespace Template {
     // Represents a horizontal list entry which acts as a button.
-    class IListButton : public IListItem {
-        signals:
-            // Signal fired when the list button is pressed.
-            virtual void pressed() = 0;
+    class IListButton : public IListItem, virtual public IClickable {
+        Q_INTERFACES(IClickable)
 
-        public:
+        public slots:
             // Sets the (optional) icon for the button.
             virtual void setIcon(QWidget * icon) = 0;
 

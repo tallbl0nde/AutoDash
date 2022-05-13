@@ -45,15 +45,15 @@ void Window::initialize(std::vector<IModule *> modules) {
     Widget::Taskbar * taskbar = new Widget::Taskbar(Widget::Taskbar::Orientation::Vertical, this);
     taskbar->setBackButtonEnabled(false);
     taskbar->setGeometry(this->width() - 80, 0, 80, this->height());
-    taskbar->onBackButtonClicked([stack]() {
+    connect(taskbar, &Widget::Taskbar::backButtonClicked, this, [stack]() {
         stack->goBack();
     });
-    taskbar->onLauncherButtonClicked([stack]() {
+    connect(taskbar, &Widget::Taskbar::launcherButtonClicked, this, [stack]() {
         stack->goHome();
     });
 
     Widget::Favourites * favourites = taskbar->favouritesWidget();
-    favourites->onEntryClicked([stack](std::string id) {
+    connect(favourites, &Widget::Favourites::entryClicked, this, [stack](std::string id) {
         stack->openFrame(id);
     });
 

@@ -56,6 +56,9 @@ namespace Widget {
         this->launcherButton->setRoundingAmount(14);
         this->launcherButton->setPaddingPercentage(15);
         this->mainLayout->addWidget(this->launcherButton, 0, alignment);
+        connect(this->launcherButton, &SvgButton::released, this, [this]() {
+            emit this->launcherButtonClicked();
+        });
 
         // Add splitter
         this->mainLayout->addWidget(getLine(orientation, 50), 0, alignment);
@@ -73,6 +76,9 @@ namespace Widget {
         this->backButton->setRoundingAmount(14);
         this->backButton->setPaddingPercentage(15);
         this->mainLayout->addWidget(this->backButton, 0, alignment);
+        connect(this->backButton, &SvgButton::released, this, [this]() {
+            emit this->backButtonClicked();
+        });
     }
 
     void Taskbar::paintEvent(QPaintEvent * event) {
@@ -91,14 +97,6 @@ namespace Widget {
         path = QPainterPath();
         path.addRect(QRect(0, 10, 1, this->height() - 20));
         painter.fillPath(path, colour2);
-    }
-
-    void Taskbar::onBackButtonClicked(const std::function<void()> callback) {
-        this->backButton->onClicked(callback);
-    }
-
-    void Taskbar::onLauncherButtonClicked(const std::function<void()> callback) {
-        this->launcherButton->onClicked(callback);
     }
 
     void Taskbar::setBackButtonEnabled(const bool enabled) {

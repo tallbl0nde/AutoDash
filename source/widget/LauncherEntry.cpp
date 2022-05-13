@@ -3,13 +3,10 @@
 
 #include "widget/LauncherEntry.hpp"
 
-#include "Log.hpp"
-
 namespace Widget {
-    LauncherEntry::LauncherEntry(QWidget * parent) : IClickable(parent) {
-        this->backgroundColour = QColor(255, 255, 255, 0);
-        this->onClickedCallback = nullptr;
+    int LauncherEntry::BackgroundCornerRadius = 20;
 
+    LauncherEntry::LauncherEntry(QWidget * parent) : BaseClickable(parent) {
         // Create layout
         // TODO: Update
         this->layout = new QHBoxLayout(this);
@@ -18,23 +15,18 @@ namespace Widget {
 
         // Insert widgets into layout
         this->label = new QLabel();
-        this->label->setFont(this->labelFont());
-        this->label->setStyleSheet(this->labelStylesheet());
         this->svg = new QSvgWidget();
 
         this->layout->addWidget(this->svg);
         this->layout->addWidget(this->label);
-    }
 
-    QFont LauncherEntry::labelFont() {
+        // TODO: Better defaults
         QFont font = QFont("Rubik");
         font.setBold(true);
         font.setPointSize(20);
-        return font;
-    }
-
-    QString LauncherEntry::labelStylesheet() {
-        return QString("QLabel { color: white; }");
+        this->setLabelFont(font);
+        this->setLabelColour(QColor(255, 255, 255, 255));
+        this->setHighlightShape(true, this->BackgroundCornerRadius);
     }
 
     void LauncherEntry::paintEvent(QPaintEvent * event) {
@@ -46,10 +38,12 @@ namespace Widget {
         painter.setRenderHint(QPainter::Antialiasing);
 
         QPainterPath path;
-        path.addRoundedRect(this->rect(), 20, 20);
+        path.addRoundedRect(this->rect(), this->BackgroundCornerRadius, this->BackgroundCornerRadius);
 
         painter.fillPath(path, colour);
-        painter.fillPath(path, backgroundColour);
+
+        // Draw highlight if needed
+        BaseClickable::paintEvent(event);
     }
 
     void LauncherEntry::resizeEvent(QResizeEvent * event) {
@@ -66,41 +60,18 @@ namespace Widget {
         this->layout->setSpacing(padding * 1.25);
     }
 
-    void LauncherEntry::onClick() {
-        this->backgroundColour.setAlpha(50);
-        this->update();
+    void LauncherEntry::setLabelColour(QColor colour) {
+        QPalette palette = this->label->palette();
+        palette.setColor(QPalette::Foreground, colour);
+        this->label->setPalette(palette);
     }
 
-    void LauncherEntry::onRegainedFocus() {
-        this->backgroundColour.setAlpha(50);
-        this->update();
-    }
-
-    void LauncherEntry::onLostFocus() {
-        this->backgroundColour.setAlpha(20);
-        this->update();
-    }
-
-    void LauncherEntry::onRelease() {
-        this->backgroundColour.setAlpha(0);
-        this->update();
-
-        if (this->onClickedCallback != nullptr) {
-            this->onClickedCallback();
-        }
-    }
-
-    void LauncherEntry::onClicked(const std::function<void ()> & func) {
-        this->onClickedCallback = func;
-    }
-
-    void LauncherEntry::setLabel(QString label) {
-        this->label->setText(label);
-    }
-
-    void LauncherEntry::setLabelStyle(QFont & font, QString & stylesheet) {
+    void LauncherEntry::setLabelFont(QFont font) {
         this->label->setFont(font);
-        this->label->setStyleSheet(stylesheet);
+    }
+
+    void LauncherEntry::setLabelText(QString label) {
+        this->label->setText(label);
     }
 
     void LauncherEntry::setSVG(QString svg) {
