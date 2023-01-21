@@ -1,3 +1,6 @@
 [submodule "modules/openauto"]
 	path = modules/OpenAuto
 	url = https://github.com/tallbl0nde/AutoDash.OpenAuto
+[submodule "modules/Lighting"]
+	path = modules/Lighting
+	url = https://github.com/tallbl0nde/AutoDash.Lighting

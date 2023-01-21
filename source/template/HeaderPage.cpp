@@ -61,7 +61,7 @@ namespace Template {
         }
 
         this->icon = icon;
-        this->icon->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        this->icon->setFixedSize(50, 50);
         this->icon->setParent(this);
         this->headerLayout->insertWidget(0, this->icon, 0, Qt::AlignVCenter);
     }
