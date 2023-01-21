@@ -2,10 +2,10 @@
 #include <QPainter>
 #include <QPainterPath>
 
-#include "template/list/ListButton.hpp"
+#include "template/list/ListOption.hpp"
 
 namespace Template {
-    ListButton::ListButton(QWidget * parent) : BaseClickable(parent) {
+    ListOption::ListOption(const std::string & name, const std::string & description, QWidget * parent) : QWidget(parent) {
         this->icon = nullptr;
         this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         this->setFixedHeight(80);
@@ -27,7 +27,7 @@ namespace Template {
         labelFont.setFamily("Rubik");
         labelFont.setPointSize(20);
 
-        this->label = new QLabel("", this);
+        this->label = new QLabel(QString::fromStdString(name), this);
         this->label->setFont(labelFont);
         this->label->setStyleSheet("color: white");     // TODO_JG: Use config for all styling
         this->label->setWordWrap(true);
@@ -42,27 +42,24 @@ namespace Template {
         this->description->setFont(descriptionFont);
         this->description->setStyleSheet("color: grey");     // TODO_JG: Use config for all styling
         this->description->setWordWrap(true);
-        this->description->setHidden(true);
+        this->setDescription(description);
         textLayout->addWidget(this->description);
 
         textLayout->addStretch();
         this->layout->addWidget(textWidget);
-
-        QFont arrowFont = QFont();
-        arrowFont.setFamily("Rubik");
-        arrowFont.setPointSize(30);
-
-        QLabel * arrow = new QLabel(">", this);
-        arrow->setFont(arrowFont);
-        arrow->setStyleSheet("color: grey");
-        this->layout->addWidget(arrow, 0, Qt::AlignVCenter);
     }
 
-    QWidget * ListButton::widget() {
+    void ListOption::setRightWidget(QWidget * widget) {
+        this->rightWidget = widget;
+        this->rightWidget->setParent(this);
+        this->layout->addWidget(this->rightWidget, 0, Qt::AlignVCenter);
+    }
+
+    QWidget * ListOption::widget() {
         return this;
     }
 
-    void ListButton::setIcon(QWidget * icon) {
+    void ListOption::setIcon(QWidget * icon) {
         if (this->icon != nullptr) {
             this->layout->removeWidget(this->icon);
             this->icon->setParent(nullptr);
@@ -76,12 +73,11 @@ namespace Template {
         this->layout->insertWidget(0, this->icon, 0, Qt::AlignVCenter);
     }
 
-    void ListButton::setLabel(const std::string label) {
+    void ListOption::setLabel(const std::string label) {
         this->label->setText(QString::fromStdString(label));
     }
 
-    void ListButton::setDescription(const std::string description) {
+    void ListOption::setDescription(const std::string description) {
         this->description->setText(QString::fromStdString(description));
-        this->description->setHidden(description.empty());
     }
 };

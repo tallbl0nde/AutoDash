@@ -9,6 +9,18 @@
 class SettingsFrame : public QWidget {
     Q_OBJECT
 
+    private:
+        // Reference to window object.
+        QWidget * window;
+
+        void onBrightnessChanged(std::string value);
+
+    private slots:
+        void onMinimizeClicked();
+        void onReloadClicked();
+        void onRebootClicked();
+        void onShutdownClicked();
+
     public:
         // Struct containing module metadata along with
         // the module's setting entries.

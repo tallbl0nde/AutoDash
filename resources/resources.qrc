@@ -5,13 +5,16 @@
         <file>backgrounds/index.jpeg</file>
         <file>fonts/Rubik.ttf</file>
         <file>icons/back.svg</file>
+        <file>icons/drop-down.svg</file>
         <file>icons/launcher.svg</file>
     </qresource>
 
     <qresource>
         <file>Settings/icons/minimize.svg</file>
+        <file>Settings/icons/reload.svg</file>
         <file>Settings/icons/restart.svg</file>
         <file>Settings/icons/settings.svg</file>
         <file>Settings/icons/shutdown.svg</file>
+        <file>Settings/icons/sun.svg</file>
     </qresource>
 </RCC>

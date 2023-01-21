@@ -1,3 +1,4 @@
+#include <QGraphicsColorizeEffect>
 #include <QHBoxLayout>
 #include <QSvgWidget>
 
@@ -9,6 +10,9 @@
 SettingsFrame::SettingsFrame(Template::IHeaderPage * parent, std::vector<ModuleSettingsData> moduleSettingsData, IResolver * resolver) : QWidget(parent->widget()) {
     parent->setHeadingText("Settings");
     parent->setIcon(new QSvgWidget(":/Settings/icons/settings.svg"));
+    this->window = resolver->window();
+
+    ITemplateProvider * templateProvider = resolver->templateProvider();
 
     // TODO: Actually add widgets
     for (auto module : moduleSettingsData) {
@@ -17,94 +21,114 @@ SettingsFrame::SettingsFrame(Template::IHeaderPage * parent, std::vector<ModuleS
         }
     }
 
-    Template::IList * list = resolver->templateProvider()->createList();
-
-    Template::IListSpacer * spacer = resolver->templateProvider()->createListSpacer();
+    // TODO: Do this better probably
+    QGraphicsColorizeEffect * iconEffect;
+    Template::IList * list = templateProvider->createList();
+    Template::IListSpacer * spacer = templateProvider->createListSpacer();
     list->addItem(spacer);
 
-    for (size_t i = 0; i < 3; i++) {
-        Template::IListButton * test = resolver->templateProvider()->createListButton();
-        connect(dynamic_cast<QObject *>(test), SIGNAL(clicked()), this, SLOT(on()));        // TODO: Try and use a lambda somehow (probably add lambda to vector and assign object address as key?)
-        test->setLabel("Android Auto Test");
-        test->setIcon(new QSvgWidget(":/OpenAuto/icons/android-auto.svg"));
-        list->addItem(test);
+    IListOptionFactory * factory = templateProvider->listOptionFactory();
+    Template::IListOption * brightnessOption = factory->createComboBox("", "", "100%", {"10%", "25%", "50%", "75%", "100%"}, [this](std::string value) {
+        this->onBrightnessChanged(value);
+    });
+    QSvgWidget * brightnessIcon = new QSvgWidget(":/Settings/icons/sun.svg");
+    iconEffect = new QGraphicsColorizeEffect();
+    iconEffect->setColor(QColor{255, 255, 255});
+    brightnessIcon->setGraphicsEffect(iconEffect);
+    brightnessOption->setDescription("Set the brightness of the display");
+    brightnessOption->setLabel("Brightness");
+    brightnessOption->setIcon(brightnessIcon);
+    list->addItem(brightnessOption);
 
-        Template::IListSeparator * sep = resolver->templateProvider()->createListSeparator();
-        list->addItem(sep);
-    }
+    list->addItem(templateProvider->createListSeparator());
 
-    spacer = resolver->templateProvider()->createListSpacer();
+    Template::IListButton * minimizeButton = templateProvider->createListButton();
+    QSvgWidget * minimizeIcon = new QSvgWidget(":/Settings/icons/minimize.svg");
+    iconEffect = new QGraphicsColorizeEffect();
+    iconEffect->setColor(QColor{255, 255, 255});
+    minimizeIcon->setGraphicsEffect(iconEffect);
+    minimizeButton->setDescription("Minimize AutoDash and show the desktop");
+    minimizeButton->setIcon(minimizeIcon);
+    minimizeButton->setLabel("Minimize");
+    templateProvider->connect(minimizeButton, SIGNAL(clicked()), this, SLOT(onMinimizeClicked()));
+    list->addItem(minimizeButton);
+
+    list->addItem(templateProvider->createListSeparator());
+
+    Template::IListButton * reloadButton = templateProvider->createListButton();
+    QSvgWidget * reloadIcon = new QSvgWidget(":/Settings/icons/reload.svg");
+    iconEffect = new QGraphicsColorizeEffect();
+    iconEffect->setColor(QColor{255, 255, 255});
+    reloadIcon->setGraphicsEffect(iconEffect);
+    reloadButton->setDescription("Reload AutoDash");
+    reloadButton->setIcon(reloadIcon);
+    reloadButton->setLabel("Reload");
+    templateProvider->connect(reloadButton, SIGNAL(clicked()), this, SLOT(onReloadClicked()));
+    list->addItem(reloadButton);
+
+    list->addItem(templateProvider->createListSeparator());
+
+    Template::IListButton * rebootButton = templateProvider->createListButton();
+    QSvgWidget * rebootIcon = new QSvgWidget(":/Settings/icons/restart.svg");
+    iconEffect = new QGraphicsColorizeEffect();
+    iconEffect->setColor(QColor{255, 255, 255});
+    rebootIcon->setGraphicsEffect(iconEffect);
+    rebootButton->setDescription("Reboot the computer");
+    rebootButton->setIcon(rebootIcon);
+    rebootButton->setLabel("Reboot");
+    templateProvider->connect(rebootButton, SIGNAL(clicked()), this, SLOT(onRebootClicked()));
+    list->addItem(rebootButton);
+
+    list->addItem(templateProvider->createListSeparator());
+
+    Template::IListButton * shutdownButton = templateProvider->createListButton();
+    QSvgWidget * shutdownIcon = new QSvgWidget(":/Settings/icons/shutdown.svg");
+    iconEffect = new QGraphicsColorizeEffect();
+    iconEffect->setColor(QColor{255, 255, 255});
+    shutdownIcon->setGraphicsEffect(iconEffect);
+    shutdownButton->setDescription("Safely shutdown the computer");
+    shutdownButton->setIcon(shutdownIcon);
+    shutdownButton->setLabel("Shutdown");
+    templateProvider->connect(shutdownButton, SIGNAL(clicked()), this, SLOT(onShutdownClicked()));
+    list->addItem(shutdownButton);
+
+    spacer = templateProvider->createListSpacer();
     spacer->setSize(20);
     list->addItem(spacer);
 
     parent->setMainWidget(list->widget());
+}
 
-    // // Create test widget
-    // QWidget * child = new QWidget();
-    // QVBoxLayout * childLayout = new QVBoxLayout(child);
+void SettingsFrame::onBrightnessChanged(std::string value) {
+    // Strip '%' off the end
+    value = value.substr(0, value.length() - 1);
 
-    // QWidget * buttonRow = new QWidget(child);
-    // QHBoxLayout * buttonRowLayout = new QHBoxLayout(buttonRow);
-    // childLayout->addWidget(buttonRow);
+    // Write out to file
+    #ifdef RPI_BUILD
+        std::ofstream backlightFile("/sys/class/backlight/rpi_backlight/brightness");
+        backlightFile << std::to_string(static_cast<int>(std::stoi(value) * 2.55)) << std::endl;
+    #else
+        std::cout << "Brightness set to " << value << "%" << std::endl;
+    #endif
+}
 
-    // // Minimize button
-    // QWidget * window = resolver->window();
-    // Template::IButton * minimize = resolver->templateProvider()->createButton();
-    // minimize->setButtonIcon(new QSvgWidget(":/Settings/icons/minimize.svg"));
-    // minimize->setButtonText("Minimize");
-    // minimize->setButtonAction([window]() {
-    //     window->showMinimized();
-    // });
-    // minimize->widget()->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    // buttonRowLayout->addWidget(minimize->widget(), 0, Qt::AlignVCenter);
+void SettingsFrame::onMinimizeClicked() {
+    this->window->showMinimized();
+}
 
-    // // Reboot button
-    // Template::IButton * reboot = resolver->templateProvider()->createButton();
-    // reboot->setButtonIcon(new QSvgWidget(":/Settings/icons/restart.svg"));
-    // reboot->setButtonText("Reboot");
-    // reboot->setButtonAction([]() {
-    //     // TODO: Better
-    //     system("sudo reboot");
-    // });
-    // reboot->widget()->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    // buttonRowLayout->addWidget(reboot->widget(), 0, Qt::AlignVCenter);
+void SettingsFrame::onReloadClicked() {
+    // TODO: Actually work
+    #ifdef RPI_BUILD
+        system("pkill -f AutoDash && /home/pi/AutoDash/bin/AutoDash");
+    #else
+        system("pkill -f AutoDash && /home/jonathon/AutoDash/bin/AutoDash");
+    #endif
+}
 
-    // // Shutdown button
-    // Template::IButton * shutdown = resolver->templateProvider()->createButton();
-    // shutdown->setButtonIcon(new QSvgWidget(":/Settings/icons/shutdown.svg"));
-    // shutdown->setButtonText("Shutdown");
-    // shutdown->setButtonAction([]() {
-    //     // TODO: Better
-    //     system("sudo shutdown now");
-    // });
-    // shutdown->widget()->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    // buttonRowLayout->addWidget(shutdown->widget(), 0, Qt::AlignVCenter);
+void SettingsFrame::onRebootClicked() {
+    system("sudo reboot");
+}
 
-
-    // QWidget * sliderRow = new QWidget(child);
-    // QHBoxLayout * sliderRowWidget = new QHBoxLayout(sliderRow);
-    // childLayout->addWidget(sliderRow);
-
-    // Template::IHorizontalIntSlider * slider = resolver->templateProvider()->createHorizontalIntSlider();
-    // slider->setLabelFormatter([](int value) {
-    //     return std::to_string(value) + "%";
-    // });
-    // slider->setAccentColour(50, 100, 200);
-    // slider->setSliderMin(0);
-    // slider->setSliderMax(100);
-    // slider->setSliderStep(1);
-    // slider->setSliderValue(100);
-    // slider->setSliderAction([](int value) {
-    //     #ifdef RPI_BUILD
-    //         std::ofstream backlightFile("/sys/class/backlight/rpi_backlight/brightness");
-    //         backlightFile << std::to_string(static_cast<int>(value * 2.55)) << std::endl;
-    //     #else
-    //         std::cout << value << std::endl;
-    //     #endif
-    // });
-    // slider->widget()->setGeometry(0, 0, 100, 50);
-
-    // sliderRowWidget->addWidget(slider->widget());
-
-    // parent->setMainWidget(child);
+void SettingsFrame::onShutdownClicked() {
+    system("sudo shutdown now");
 }

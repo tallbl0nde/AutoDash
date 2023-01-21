@@ -17,6 +17,9 @@ namespace Template {
 
             // Sets the label for the button.
             virtual void setLabel(const std::string label) = 0;
+
+            // Sets a description for the button.
+            virtual void setDescription(const std::string description) = 0;
     };
 };
 

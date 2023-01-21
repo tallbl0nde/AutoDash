@@ -18,6 +18,10 @@ class TemplateProvider : public ITemplateProvider {
         Template::IListButton * createListButton() override;
         Template::IListSeparator * createListSeparator() override;
         Template::IListSpacer * createListSpacer() override;
+        IListOptionFactory * listOptionFactory() override;
+        QMetaObject::Connection connect(Template::ITemplate * source, const char * signal, QObject * sink, const char * slot) override;
+        QMetaObject::Connection connect(Template::ITemplate * source, const char * signal, Template::ITemplate * sink, const char * slot) override;
+        QMetaObject::Connection connect(QObject * source, const char * signal, Template::ITemplate * sink, const char * slot) override;
 };
 
 #endif

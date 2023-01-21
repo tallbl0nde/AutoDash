@@ -12,7 +12,19 @@ namespace Template {
 
         // Set up header layout
         QWidget * headerWidget = new QWidget(this);
+
         this->heading = new QLabel("HeaderPage", headerWidget);
+
+        QFont font = this->heading->font();
+        font.setBold(true);
+        font.setFamily(QString::fromStdString("Rubik"));        // TODO: Use config
+        font.setPointSize(18 + HEADING_FONT_OFFSET);
+        this->heading->setFont(font);
+
+        QGraphicsColorizeEffect * headingEffect = new QGraphicsColorizeEffect();
+        headingEffect->setColor(QColor{255, 255, 255});
+        this->heading->setGraphicsEffect(headingEffect);
+
         this->headerLayout = new QHBoxLayout(headerWidget);
         this->headerLayout->addWidget(this->heading, 0, Qt::AlignVCenter);
         this->headerLayout->addStretch();

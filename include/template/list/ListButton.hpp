@@ -23,6 +23,9 @@ namespace Template {
             // Label widget.
             QLabel * label;
 
+            // Description widget.
+            QLabel * description;
+
         public:
             // Constructs a new ListButton.
             ListButton(QWidget * parent = nullptr);
@@ -34,6 +37,7 @@ namespace Template {
             // Implement IListButton.
             void setIcon(QWidget * icon) override;
             void setLabel(const std::string label) override;
+            void setDescription(const std::string description) override;
     };
 };
 
