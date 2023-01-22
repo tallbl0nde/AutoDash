@@ -57,7 +57,7 @@ namespace Widget {
         }
 
         // Store current frame
-        this->stack.push(Frame{this->currentID, this->currentWidget()});
+        this->stack.push(Frame{id, this->currentWidget()});
 
         // Set new and emit event
         this->currentID = (*it).id;

@@ -40,6 +40,9 @@ void Launcher::finalize(QWidget * parent) {
         this->grid->addWidget(w, 0, 1, Qt::AlignTop);
     }
 
+    // Set row after last to stretch to fill available space
+    this->grid->setRowStretch(entries/2 + 1, 1);
+
     // Resize to parent
     this->resize(parent->size());
 }
